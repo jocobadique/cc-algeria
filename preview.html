@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Algeria explorer preview</title>
+  <style>
+    body { margin: 0; background: #f7fdfd; }
+    main { max-width: 1240px; margin: 0 auto; padding: 64px 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <cc-algeria id="algeria" eyebrow="The Algeria Monument Project"></cc-algeria>
+  </main>
+  <script src="dist/cc-algeria.js"></script>
+  <script>
+    // Stand-in for the Wix page code: load the CMS export and pass it in like
+    // $w('#customElement1').setAttribute('monuments', JSON.stringify(items)).
+    fetch("sample-monuments.json")
+      .then((r) => r.json())
+      .then((items) => document.getElementById("algeria").setAttribute("monuments", JSON.stringify(items)));
+  </script>
+</body>
+</html>
