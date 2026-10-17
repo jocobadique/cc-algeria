@@ -17,6 +17,10 @@ Then paste `wix/algeria.page.js` into the page's code. It queries the Monuments 
 
 The page code also sets the page's structured data (a schema.org `ItemList` of `TouristAttraction` entries with name, description, location and photos) through `wix-seo-frontend`. The element draws the cards in the browser, so this is how the monuments reach the HTML Wix renders for search engines. Check it with Google's Rich Results Test on the published page.
 
+### Page hero
+
+The hero above the grid (title, intro and the QR-code line) is native Wix text, so it stays in the HTML Wix renders. It is styled by `wix/algeria-hero.css`, appended to the site's `global.css` in Studio (Code > CSS). In `global.css`, Studio prefixes every class with `wixui-`, so target rich text with `.rich-text__text`, not `.wixui-rich-text__text`. The classes are set on the elements in Studio (code panel > CSS Classes); the file's header lists which element gets which. The section's deep-teal background (`#003c40`, photo at 35% opacity), the stack margins per breakpoint and the H1 tag are set in Studio itself.
+
 Optional attributes, set in the element's settings in Studio:
 
 - `eyebrow` and `heading`: a label and heading above the grid. Leave them empty when the Wix page has its own heading.
