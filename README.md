@@ -15,6 +15,8 @@ Pin a tag (for example `v1.0.0`) so a change only goes live when the URL in Stud
 
 Then paste `wix/algeria.page.js` into the page's code. It queries the Monuments collection (Published only, sorted by Order) and passes the items to the element as JSON on its `monuments` attribute. Change `#customElement1` if the element has a different ID.
 
+The page code also sets the page's structured data (a schema.org `ItemList` of `TouristAttraction` entries with name, description, location and photos) through `wix-seo-frontend`. The element draws the cards in the browser, so this is how the monuments reach the HTML Wix renders for search engines. Check it with Google's Rich Results Test on the published page.
+
 Optional attributes, set in the element's settings in Studio:
 
 - `eyebrow` and `heading`: a label and heading above the grid. Leave them empty when the Wix page has its own heading.
