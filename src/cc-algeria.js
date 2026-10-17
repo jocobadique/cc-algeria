@@ -100,7 +100,7 @@ cc-algeria .cca-d-title { margin: 10px 0 0; padding-right: 40px; font: 500 clamp
 cc-algeria .cca-d-desc { margin: 16px 0 0; font-size: 1rem; color: var(--cca-fg); opacity: 0.85; white-space: pre-line; }
 cc-algeria .cca-d-gal { padding: 24px 32px 0; }
 cc-algeria .cca-stage { position: relative; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; background: var(--cca-secondary); }
-cc-algeria .cca-stage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+cc-algeria .cca-stage img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 cc-algeria .cca-nav { position: absolute; inset-inline: 12px; bottom: 12px; display: flex; justify-content: space-between; pointer-events: none; }
 cc-algeria .cca-nav button { pointer-events: auto; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 8px; background: rgba(255, 255, 255, 0.92); color: var(--cca-fg); cursor: pointer; }
 cc-algeria .cca-cap { display: flex; justify-content: space-between; gap: 10px; margin: 8px 0 0; font-size: 0.78rem; color: var(--cca-muted); }
