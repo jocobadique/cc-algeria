@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partners preview</title>
+  <style>
+    body { margin: 0; background: #f7fdfd; }
+    main { max-width: 1240px; margin: 0 auto; padding: 64px 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <cc-partners id="partners"></cc-partners>
+  </main>
+  <script src="dist/cc-partners.js"></script>
+  <script>
+    // Stand-in for the Wix page code: load the CMS export and pass it in like
+    // $w('#customElement1').setAttribute('partners', JSON.stringify(items)).
+    fetch("sample-partners.json")
+      .then((r) => r.json())
+      .then((items) => document.getElementById("partners").setAttribute("partners", JSON.stringify(items)));
+  </script>
+</body>
+</html>

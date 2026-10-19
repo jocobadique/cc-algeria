@@ -1,0 +1,37 @@
+[
+  {
+    "title": "TEEN Mythology Guild",
+    "venue": "Blasco Memorial Library",
+    "audience": "Teens",
+    "description": "Description coming soon.",
+    "order": 1
+  },
+  {
+    "title": "TWEENS Mythology Guild",
+    "venue": "Blasco Memorial Library",
+    "audience": "Tweens",
+    "description": "Description coming soon.",
+    "order": 2
+  },
+  {
+    "title": "YOUTH-Led Humanities",
+    "venue": "Blasco Memorial Library",
+    "audience": "Youth",
+    "description": "Description coming soon.",
+    "order": 3
+  },
+  {
+    "title": "Value-Added Program",
+    "venue": "Erie Children's Museum",
+    "audience": "",
+    "description": "Description coming soon.",
+    "order": 4
+  },
+  {
+    "title": "NSLIY Sponsored Workshops and Podcast",
+    "venue": "NSLI-Y",
+    "audience": "",
+    "description": "Description coming soon.",
+    "order": 5
+  }
+]

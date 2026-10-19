@@ -4,6 +4,11 @@
 
 The page's hero, intro text and the QR-code paragraph stay as native Wix text so they keep their SEO. This element covers the monument grid only.
 
+The repo also holds two more elements built the same way, each for its own page (see [Events and Partners](#events-and-partners)):
+
+- `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery.
+- `<cc-partners>`: the partners from the **Partners** collection, as logo cards with collaboration details and a website link.
+
 ## Use in Wix Studio
 
 Add a **Custom Element** to the page, set its source to **Server URL**, and enter:
@@ -45,6 +50,39 @@ Optional attributes, set in the element's settings in Studio:
 
 Editors change content in the CMS; nothing in this repo needs to change for new monuments.
 
+## Events and Partners
+
+Same setup as the monuments: a Custom Element with a Server URL (same repo and tag, different file), plus page code that reads the collection and passes the items as JSON. Page headings and intro text stay native Wix text.
+
+| Element | Server URL file | Tag name | Page code | Attribute |
+| --- | --- | --- | --- | --- |
+| Events | `dist/cc-events.js` | `cc-events` | `wix/events.page.js` | `events` |
+| Our Partners | `dist/cc-partners.js` | `cc-partners` | `wix/partners.page.js` | `partners` |
+
+Events collection:
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Program Name | `title` | Card and popup heading |
+| Venue | `venue` | Pin line, and the filter buttons (shown when there is more than one venue) |
+| Audience | `audience` | Card badge and popup label, when set |
+| Description | `description` | Card text (3 lines) and popup text |
+| Cover Image | `coverImage` | Card image and first popup photo; without one the card shows a teal panel with the program's initial |
+| Gallery | `gallery` | More popup photos, if the collection has a media gallery field with this key (videos are skipped) |
+| Order | `order` | Card order |
+
+Partners collection:
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Partner Name | `title` | Card heading |
+| Logo | `logo` | Fitted (not cropped) on a white panel; without one the card shows the name's initials |
+| Collaboration Details | `collaboration` | Card text |
+| Website | `website` | "Visit website" link, shown only when set |
+| Order | `order` | Card order |
+
+Optional attributes: `eyebrow` and `heading` on both; `more-label` on `cc-events` (card button, default "View Details"); `link-label` on `cc-partners` (default "Visit website").
+
 ## How it renders
 
 - Light DOM, not a shadow root, so the monument names and descriptions are part of the page. Styles are injected once into `<head>` and scoped under `cc-algeria` with `cca-` class names, so they don't affect the rest of the site.
@@ -52,11 +90,12 @@ Editors change content in the CMS; nothing in this repo needs to change for new 
 - Fonts (Fraunces for headings, Poppins for body text to match the site) load from Google Fonts on the page.
 - Wix image fields (`wix:image://v1/...`) are turned into `static.wixstatic.com` URLs, resized for cards and thumbnails.
 - Until data arrives it shows placeholder cards. Grid: 3 columns, 2 below 1000px, 1 below 640px.
+- The Studio editor doesn't run page code, so in the editor the elements stay on their placeholder cards. The cards appear in Preview and on the published site.
 - The popup closes with Escape, the close button or a click outside it, keeps keyboard focus inside while open, and returns focus to the card's button. It fires an `open` event (`{ id, title }`) if the page code wants to track it.
 
 ## Develop
 
-- Edit `src/cc-algeria.js`.
-- `python build.py v1.0.0` writes `dist/cc-algeria.js` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URL.
-- `preview.html` stands in for the Wix page: it loads `sample-monuments.json` (an export of the CMS collection) the same way the page code does. Serve the folder (for example `npx serve .`) and open it, since it fetches the JSON.
+- Edit the elements in `src/`.
+- `python build.py v1.1.0` writes every `src/cc-*.js` to `dist/` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URLs.
+- `preview.html`, `preview-events.html` and `preview-partners.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` and `sample-partners.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
 - `node shoot.cjs 375,768,1366` saves full-page and popup screenshots to `shots/` (needs `npm i playwright`).

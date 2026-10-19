@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events preview</title>
+  <style>
+    body { margin: 0; background: #f7fdfd; }
+    main { max-width: 1240px; margin: 0 auto; padding: 64px 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <cc-events id="events"></cc-events>
+  </main>
+  <script src="dist/cc-events.js"></script>
+  <script>
+    // Stand-in for the Wix page code: load the CMS export and pass it in like
+    // $w('#customElement1').setAttribute('events', JSON.stringify(items)).
+    fetch("sample-events.json")
+      .then((r) => r.json())
+      .then((items) => document.getElementById("events").setAttribute("events", JSON.stringify(items)));
+  </script>
+</body>
+</html>
