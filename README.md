@@ -49,7 +49,7 @@ Editors change content in the CMS; nothing in this repo needs to change for new 
 
 - Light DOM, not a shadow root, so the monument names and descriptions are part of the page. Styles are injected once into `<head>` and scoped under `cc-algeria` with `cca-` class names, so they don't affect the rest of the site.
 - Colors follow the redesign's teal theme and can be overridden with CSS variables on the element (`--cca-primary`, `--cca-deep`, `--cca-accent`, and so on).
-- Fonts (Fraunces and Bricolage Grotesque) load from Google Fonts on the page.
+- Fonts (Fraunces for headings, Poppins for body text to match the site) load from Google Fonts on the page.
 - Wix image fields (`wix:image://v1/...`) are turned into `static.wixstatic.com` URLs, resized for cards and thumbnails.
 - Until data arrives it shows placeholder cards. Grid: 3 columns, 2 below 1000px, 1 below 640px.
 - The popup closes with Escape, the close button or a click outside it, keeps keyboard focus inside while open, and returns focus to the card's button. It fires an `open` event (`{ id, title }`) if the page code wants to track it.

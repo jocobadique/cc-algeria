@@ -1,4 +1,4 @@
-/*! cc-algeria v1.0.2 */
+/*! cc-algeria v1.0.3 */
 /*
  * <cc-algeria> — Classic Compass "Algeria Initiative" monument explorer.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -24,7 +24,7 @@
   if (customElements.get(TAG)) return;
 
   const FONTS_HREF =
-    "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,400..700&display=swap";
+    "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Poppins:wght@400;500;600;700&display=swap";
 
   const CSS = `
 cc-algeria {
@@ -38,7 +38,7 @@ cc-algeria {
   --cca-muted: #426566;
   --cca-border: #cce4e2;
   --cca-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --cca-body: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --cca-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
   color: var(--cca-fg);
   font-family: var(--cca-body);
