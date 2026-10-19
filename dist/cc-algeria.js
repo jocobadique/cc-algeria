@@ -1,4 +1,4 @@
-/*! cc-algeria v1.0.1 */
+/*! cc-algeria v1.0.2 */
 /*
  * <cc-algeria> — Classic Compass "Algeria Initiative" monument explorer.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -16,7 +16,8 @@
  * Optional attributes:
  *   heading   — a heading above the grid (leave empty when the Wix page has its own)
  *   eyebrow   — small label above the heading
- *   guide-label — text for the Student Guide button (default "Student Guide")
+ *   guide-label — text for the card button that opens the popup, and for the
+ *                 popup's guide link when one is set (default "Student Guide")
  */
 (() => {
   const TAG = "cc-algeria";
@@ -194,6 +195,7 @@ cc-algeria [hidden] { display: none !important; }
           location: m.location || "",
           mapsUrl: m.mapsUrl || "",
           description: m.description || "",
+          guideText: m.guideText || "",
           category: m.category || "",
           unesco: m.unesco === true,
           guideUrl: m.guideUrl || "",
@@ -227,7 +229,9 @@ cc-algeria [hidden] { display: none !important; }
     attributeChangedCallback(name) {
       if (!this._built) return;
       if (name === "monuments") this._readData();
-      else this._renderHead();
+      else if (name === "guide-label") {
+        if (this._items) this._renderGrid();
+      } else this._renderHead();
     }
 
     // Lets page code pass the array directly instead of an attribute.
@@ -405,12 +409,13 @@ cc-algeria [hidden] { display: none !important; }
       return this.monuments.filter(
         (m) =>
           (this._filter === "all" || m.category === this._filter) &&
-          (!this._query || `${m.title} ${m.location} ${m.description}`.toLowerCase().includes(this._query)),
+          (!this._query || `${m.title} ${m.location} ${m.description} ${m.guideText}`.toLowerCase().includes(this._query)),
       );
     }
 
     _renderGrid() {
       const list = this._visible();
+      const label = this.getAttribute("guide-label") || "Student Guide";
       this._el.grid.innerHTML = list
         .map((m) => {
           const cover = m.photos[0];
@@ -425,7 +430,7 @@ cc-algeria [hidden] { display: none !important; }
               ${m.location ? `<p class="cca-loc">${PIN}${esc(m.location)}</p>` : ""}
               <h3 class="cca-name">${esc(m.title)}</h3>
               <p class="cca-desc">${esc(m.description)}</p>
-              <button type="button" class="cca-more" data-open="${esc(m.id)}" aria-haspopup="dialog">View Details ${ARROW}</button>
+              <button type="button" class="cca-more" data-open="${esc(m.id)}" aria-haspopup="dialog">${esc(label)} ${ARROW}</button>
             </div>
           </article>`;
         })
@@ -444,8 +449,10 @@ cc-algeria [hidden] { display: none !important; }
         (m.unesco ? '<span class="cca-tag">UNESCO World Heritage Site</span>' : "") +
         (m.mapsUrl ? `<a href="${esc(m.mapsUrl)}" target="_blank" rel="noopener">View on map</a>` : "");
       e.dTitle.textContent = m.title;
-      e.dDesc.textContent = m.description;
-      e.dDesc.hidden = !m.description;
+      // The popup shows the Student Guide text; the short description is for the card.
+      const text = m.guideText || m.description;
+      e.dDesc.textContent = text;
+      e.dDesc.hidden = !text;
       e.dGal.hidden = m.photos.length === 0;
       e.dNav.hidden = m.photos.length < 2;
       e.dThumbs.hidden = m.photos.length < 2;

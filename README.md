@@ -24,7 +24,7 @@ The hero above the grid (title, intro and the QR-code line) is native Wix text, 
 Optional attributes, set in the element's settings in Studio:
 
 - `eyebrow` and `heading`: a label and heading above the grid. Leave them empty when the Wix page has its own heading.
-- `guide-label`: the Student Guide button text (default "Student Guide").
+- `guide-label`: the text of the card button that opens the popup, also used for the popup's guide link when `guideUrl` is set (default "Student Guide", as on the original page).
 
 ## Content (Monuments collection)
 
@@ -33,7 +33,8 @@ Optional attributes, set in the element's settings in Studio:
 | Name | `title` | Card and popup heading |
 | Location | `location` | Pin line on the card and popup |
 | Maps Link | `mapsUrl` | "View on map" in the popup |
-| Description | `description` | Card text (3 lines) and full popup text |
+| Description | `description` | Card text (3 lines); popup text when Student Guide Text is empty |
+| Student Guide Text | `guideText` | Popup text: the client's copy from the original page's Student Guide lightboxes |
 | Category | `category` | Filter buttons, built from whatever categories exist |
 | UNESCO Site | `unesco` | Card badge and popup label |
 | Cover Image / Gallery Image 2 | `coverImage`, `image2` | Card image and popup gallery |
