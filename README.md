@@ -6,7 +6,7 @@ The page's hero, intro text and the QR-code paragraph stay as native Wix text so
 
 The repo also holds two more elements built the same way, each for its own page (see [Events and Partners](#events-and-partners)):
 
-- `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery.
+- `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery and the program's dated sessions from the **Sessions** collection.
 - `<cc-partners>`: the partners from the **Partners** collection, as logo cards with collaboration details and a website link.
 
 ## Use in Wix Studio
@@ -68,8 +68,19 @@ Events collection:
 | Audience | `audience` | Card badge and popup label, when set |
 | Description | `description` | Card text (3 lines) and popup text |
 | Cover Image | `coverImage` | Card image and first popup photo; without one the card shows a teal panel with the program's initial |
-| Gallery | `gallery` | More popup photos, if the collection has a media gallery field with this key (videos are skipped) |
+| Gallery | `gallery` | More popup photos (media gallery field; videos are skipped) |
 | Order | `order` | Card order |
+
+Sessions collection (one row per dated session; the page code attaches each program's rows to it as `sessions`):
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Session Title | `title` | Session heading in the popup |
+| Program | `program` | Reference to the Events item the session belongs to |
+| Date | `date` | Date block and order. Sessions from today on are listed first under "Upcoming sessions" (soonest first), and the card shows "Next: <date>"; earlier ones follow under "Past sessions" (newest first, 4 shown until "Show all") |
+| Time | `time` | Free text after the date, for example "6:00 - 7:30 pm" |
+| Description | `description` | Session text, when set |
+| Event Link | `link` | "Event page" link (opens the library's event page in a new tab), when set |
 
 Partners collection:
 
@@ -81,7 +92,7 @@ Partners collection:
 | Website | `website` | "Visit website" link, shown only when set |
 | Order | `order` | Card order |
 
-Optional attributes: `eyebrow` and `heading` on both; `more-label` on `cc-events` (card button, default "View Details"); `link-label` on `cc-partners` (default "Visit website").
+Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"). On `cc-partners`: `link-label` (default "Visit website").
 
 ## How it renders
 
@@ -97,5 +108,5 @@ Optional attributes: `eyebrow` and `heading` on both; `more-label` on `cc-events
 
 - Edit the elements in `src/`.
 - `python build.py v1.1.0` writes every `src/cc-*.js` to `dist/` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URLs.
-- `preview.html`, `preview-events.html` and `preview-partners.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` and `sample-partners.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
+- `preview.html`, `preview-events.html` and `preview-partners.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`) and `sample-partners.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
 - `node shoot.cjs 375,768,1366` saves full-page and popup screenshots to `shots/` (needs `npm i playwright`).

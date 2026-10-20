@@ -1,37 +1,139 @@
 [
   {
+    "_id": "5bab70fc-0838-4474-ab96-04645c283fbb",
     "title": "TEEN Mythology Guild",
     "venue": "Blasco Memorial Library",
     "audience": "Teens",
-    "description": "Description coming soon.",
-    "order": 1
+    "description": "Step into a world of gods, heroes, monsters, and magic! The Teen Mythology Guild is the perfect place for mythology enthusiasts to connect, create, and have fun. Each meeting dives into fascinating myths from around the world—Greek, Norse, Egyptian, Japanese, and beyond—through lively discussions, creative crafts, and epic games. Whether you’re obsessed with Percy Jackson, love learning about ancient cultures, or just enjoy a good tale, this club is for you!\n\nFor teens ages 13-18. No registration required. This event is run by local teens from Classic Compass.",
+    "order": 1,
+    "coverImage": "wix:image://v1/d788fe_126082d8817d4ac786f1263445e4ab94~mv2.jpg/events-teen-1-escape-room.jpg#originWidth=2000&originHeight=1506",
+    "gallery": [
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_46726e7c44a74e809944ac0a321c00e6~mv2.jpg/events-teen-2-god-cards.jpg#originWidth=2000&originHeight=1506",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_d1393a5206d34e8e952aa73c6738fe90~mv2.jpg/events-teen-3-puzzle.jpg#originWidth=2000&originHeight=1907",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_81bef02016e64611a966e2baa4cb6992~mv2.jpg/events-teen-4-summer-poster.jpg#originWidth=2000&originHeight=1500",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_24c9b5abd1a3472e9701c4877aea1a1e~mv2.jpg/events-teen-5-myth-maps.jpg#originWidth=1920&originHeight=1005",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_07b80841a1384f8ba41613a014dd1531~mv2.jpg/events-teen-6-odin-maze.jpg#originWidth=1506&originHeight=2000",
+        "title": ""
+      }
+    ]
   },
   {
+    "_id": "bf21d9e4-5bdc-4f4c-990d-269edf976bb9",
     "title": "TWEENS Mythology Guild",
     "venue": "Blasco Memorial Library",
     "audience": "Tweens",
-    "description": "Description coming soon.",
-    "order": 2
+    "description": "Can you recite all of the Ancient Greek gods and goddesses? Do you know everything there is to know about the Ancient Egyptian afterlife? Maybe you just love mythology of all kinds? Want to meet other kids who share your passion?\n\nJoin us at our Mythology Guild where we will explore a different world mythology each month!\n\nThis program is intended for children ages 9-13.",
+    "order": 2,
+    "coverImage": "wix:image://v1/d788fe_4e9df16744b24072819b3efd6de7253d~mv2.jpg/events-tween-1-egypt-books.jpg#originWidth=2000&originHeight=1500",
+    "gallery": [
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_01546dc173fb4370ad10f5f826f36191~mv2.jpg/events-tween-2-loom.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_e8ded5a3d50a44f7b9d5e82e1c03b938~mv2.jpg/events-tween-3-whiteboard-egypt.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_b39efbab106145e7a222c99b1b9e43ae~mv2.jpg/events-tween-4-whiteboard-greek.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_d54980728fae4babba019557ac1fd8f2~mv2.jpg/events-tween-5-flyer-july.jpg#originWidth=1545&originHeight=1999",
+        "title": ""
+      }
+    ]
   },
   {
+    "_id": "dda29f8c-3be6-4389-a0c5-3c0f68a5add9",
     "title": "YOUTH-Led Humanities",
     "venue": "Blasco Memorial Library",
     "audience": "Youth",
-    "description": "Description coming soon.",
-    "order": 3
+    "description": "Stories That Shape Us is all about exploring the wild, weird, and wonderful world of folklore. Each week, we’ll jump into legends, ancient tales, family traditions, and myths. You’ll get to read, talk, create, and collaborate with other teens while discovering what makes stories so powerful.",
+    "order": 3,
+    "coverImage": "wix:image://v1/d788fe_fc3290b66a3c4434b8a55b2221d3aa3d~mv2.jpg/events-youth-1-art-wall.jpg#originWidth=2000&originHeight=1500",
+    "gallery": [
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_d69a766e2bc2461d88dcaec7a054800f~mv2.jpg/events-youth-2-creature-board.jpg#originWidth=2000&originHeight=1500",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_590d642cb1e64ccca767bdc26b640b6e~mv2.jpg/events-youth-3-runes.jpg#originWidth=2000&originHeight=1500",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_0160b5aaa408429f96d4ee34fd632785~mv2.jpg/events-youth-4-announcement.jpg#originWidth=940&originHeight=788",
+        "title": ""
+      }
+    ]
   },
   {
+    "_id": "7384eb64-f9ff-45a4-8020-836089940e3a",
     "title": "Value-Added Program",
     "venue": "Erie Children's Museum",
     "audience": "",
-    "description": "Description coming soon.",
-    "order": 4
+    "description": "Wonder Time — Mythology with a Classic Compass\nI wonder… what stories were told before science had all the answers?\n\nIncluded with Admission to the Museum!",
+    "order": 4,
+    "coverImage": "wix:image://v1/d788fe_c7b2fcb1940d45acbc66f8d028d4647e~mv2.jpg/events-museum-1-minotaur.jpg#originWidth=2000&originHeight=1500",
+    "gallery": [
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_c9a71943648d46ac88a99882f4efd12c~mv2.jpg/events-museum-2-clay-monsters.jpg#originWidth=2000&originHeight=1500",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_d6fab97208ff484f9074aa982521364a~mv2.jpg/events-museum-3-cup-creature.jpg#originWidth=2000&originHeight=1500",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_84f3a3e26fd44cfd8456f6a712dc7ab4~mv2.jpg/events-museum-4-craft-table.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_28b96e64ac1748898134fc8183e2f91c~mv2.jpg/events-museum-5-laurel.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      },
+      {
+        "type": "image",
+        "src": "wix:image://v1/d788fe_8976d25b18b54748b32e1808ac41d871~mv2.jpg/events-museum-6-sign.jpg#originWidth=1500&originHeight=2000",
+        "title": ""
+      }
+    ]
   },
   {
+    "_id": "67cdad07-c78e-4540-a0a1-61b77591fce4",
     "title": "NSLIY Sponsored Workshops and Podcast",
-    "venue": "NSLI-Y",
+    "venue": "Blasco Memorial Library",
     "audience": "",
-    "description": "Description coming soon.",
+    "description": "This workshop will introduce high school students to National Security Language Initiative for Youth (NSLI-Y) and international exchange opportunities.",
     "order": 5
   }
 ]

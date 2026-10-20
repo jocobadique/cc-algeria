@@ -1,4 +1,4 @@
-/*! cc-events v1.1.0 */
+/*! cc-events v1.2.0 */
 /*
  * <cc-events> — Classic Compass "Events" program explorer.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -9,6 +9,10 @@
  *   $w('#customElement1').setAttribute('events', JSON.stringify(items))
  * Image fields can be Wix image URIs (wix:image://v1/...) or plain URLs; the
  * optional `gallery` field is a Wix media gallery (an array of { src }).
+ * Each event can carry a `sessions` array (the page code attaches the
+ * program's rows from the "Sessions" collection): { title, date (YYYY-MM-DD),
+ * time, description, link }. The popup lists upcoming sessions first, then
+ * past ones, newest first.
  *
  * It renders into the light DOM (not a shadow root) so the program names
  * and descriptions are part of the page for search engines. All styles are
@@ -18,6 +22,9 @@
  *   heading    — a heading above the grid (leave empty when the Wix page has its own)
  *   eyebrow    — small label above the heading
  *   more-label — text for the card button that opens the popup (default "View Details")
+ *   upcoming-label, past-label — headings of the popup's session lists
+ *                (default "Upcoming sessions", "Past sessions")
+ *   link-label — text for a session's event page link (default "Event page")
  */
 (() => {
   const TAG = "cc-events";
@@ -73,7 +80,9 @@ cc-events .cce-body { display: flex; flex-direction: column; flex: 1; padding: 2
 cc-events .cce-loc { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.8rem; color: var(--cce-muted); }
 cc-events .cce-loc svg { flex: none; }
 cc-events .cce-name { margin: 8px 0 0; font: 500 1.5rem/1.2 var(--cce-display); color: var(--cce-deep); text-wrap: balance; }
-cc-events .cce-desc { margin: 12px 0 20px; font-size: 0.93rem; color: var(--cce-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+cc-events .cce-desc { margin: 12px 0 20px; font-size: 0.93rem; color: var(--cce-muted); white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+cc-events .cce-next { display: flex; align-items: center; gap: 8px; margin: -6px 0 18px; font-size: 0.85rem; font-weight: 600; color: var(--cce-deep); }
+cc-events .cce-next svg { flex: none; color: var(--cce-primary); }
 cc-events .cce-more { appearance: none; margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; border-top: 1px solid var(--cce-border); background: none; padding: 14px 0 0; font: 600 0.95rem var(--cce-body); color: var(--cce-primary); cursor: pointer; text-align: left; }
 cc-events .cce-more:hover { color: var(--cce-deep); }
 
@@ -92,6 +101,7 @@ cc-events .cce-d-desc { margin: 16px 0 0; font-size: 1rem; color: var(--cce-fg);
 cc-events .cce-d-gal { padding: 24px 32px 0; }
 cc-events .cce-stage { position: relative; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; background: var(--cce-secondary); }
 cc-events .cce-stage img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+cc-events .cce-stage img.is-tall { object-fit: contain; object-position: center; }
 cc-events .cce-nav { position: absolute; inset-inline: 12px; bottom: 12px; display: flex; justify-content: space-between; pointer-events: none; }
 cc-events .cce-nav button { pointer-events: auto; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 8px; background: rgba(255, 255, 255, 0.92); color: var(--cce-fg); cursor: pointer; }
 cc-events .cce-cap { margin: 8px 0 0; font-size: 0.78rem; color: var(--cce-muted); }
@@ -99,8 +109,28 @@ cc-events .cce-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12
 cc-events .cce-thumbs button { width: 80px; height: 56px; padding: 0; border: 1px solid var(--cce-border); border-radius: 6px; overflow: hidden; background: var(--cce-secondary); cursor: pointer; opacity: 0.55; }
 cc-events .cce-thumbs button[aria-pressed="true"] { opacity: 1; outline: 2px solid var(--cce-primary); outline-offset: 2px; }
 cc-events .cce-thumbs img { display: block; width: 100%; height: 100%; object-fit: cover; }
+cc-events .cce-d-ses { padding: 8px 32px 0; }
+cc-events .cce-ses-h { margin: 28px 0 4px; font: 600 0.78rem/1.3 var(--cce-body); letter-spacing: 0.18em; text-transform: uppercase; color: var(--cce-primary); }
+cc-events .cce-ses-list { list-style: none; margin: 0; padding: 0; }
+cc-events .cce-ses { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 18px; padding: 18px 0; border-top: 1px solid var(--cce-border); }
+cc-events .cce-ses-list > .cce-ses:first-child { border-top: 0; }
+cc-events .cce-cal { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 64px; border-radius: 8px; background: var(--cce-secondary); color: var(--cce-deep); text-align: center; }
+cc-events .cce-ses.is-up .cce-cal { background: var(--cce-deep); color: #fff; }
+cc-events .cce-cal-m { font: 700 0.68rem/1 var(--cce-body); letter-spacing: 0.08em; text-transform: uppercase; }
+cc-events .cce-cal-d { margin-top: 3px; font: 500 1.6rem/1 var(--cce-display); }
+cc-events .cce-cal-y { margin-top: 3px; font-size: 0.66rem; opacity: 0.75; }
+cc-events .cce-ses-when { margin: 0; font-size: 0.8rem; color: var(--cce-muted); }
+cc-events .cce-ses-title { margin: 2px 0 0; font: 500 1.15rem/1.3 var(--cce-display); color: var(--cce-deep); }
+cc-events .cce-ses-desc { margin: 8px 0 0; font-size: 0.92rem; color: var(--cce-fg); opacity: 0.85; white-space: pre-line; }
+cc-events .cce-ses-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.88rem; font-weight: 600; color: var(--cce-primary); text-decoration: none; }
+cc-events .cce-ses-link:hover { color: var(--cce-deep); text-decoration: underline; }
+cc-events .cce-ses-all { appearance: none; margin: 4px 0 0; padding: 10px 18px; border: 1px solid var(--cce-border); border-radius: 999px; background: none; font: 600 0.88rem var(--cce-body); color: var(--cce-deep); cursor: pointer; }
+cc-events .cce-ses-all:hover { background: var(--cce-secondary); }
+cc-events .cce-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 620px) {
-  cc-events .cce-d-top, cc-events .cce-d-gal { padding-left: 20px; padding-right: 20px; }
+  cc-events .cce-d-top, cc-events .cce-d-gal, cc-events .cce-d-ses { padding-left: 20px; padding-right: 20px; }
+  cc-events .cce-ses { grid-template-columns: 54px minmax(0, 1fr); gap: 14px; }
+  cc-events .cce-cal { height: 58px; }
   cc-events .cce-d-top { padding-top: 24px; }
 }
 cc-events :focus-visible { outline: 3px solid var(--cce-accent); outline-offset: 2px; }
@@ -120,6 +150,13 @@ cc-events [hidden] { display: none !important; }
     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
   const CLOSE =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  const CALENDAR =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+  const EXTERNAL =
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+
+  // Past sessions shown before the "Show all" button.
+  const PAST_SHOWN = 4;
 
   function ensureAssets() {
     if (!document.querySelector(`link[data-${TAG}-fonts]`)) {
@@ -154,6 +191,49 @@ cc-events [hidden] { display: none !important; }
     return v;
   }
 
+  // CMS date fields arrive as "YYYY-MM-DD"; Date objects and ISO strings are
+  // reduced to the same form. Dates are compared and formatted as calendar
+  // days, so the viewer's time zone can't shift them.
+  function dayKey(value) {
+    if (!value) return "";
+    if (value instanceof Date) return isNaN(value) ? "" : value.toISOString().slice(0, 10);
+    const v = typeof value === "object" ? value.$date || "" : String(value);
+    const m = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? m[0] : "";
+  }
+
+  function todayKey() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  function dayParts(key) {
+    const [y, m, d] = key.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    const fmt = (o) => new Intl.DateTimeFormat("en-US", { ...o, timeZone: "UTC" }).format(date);
+    return {
+      month: fmt({ month: "short" }),
+      day: String(d),
+      year: String(y),
+      long: fmt({ weekday: "short", month: "short", day: "numeric", year: "numeric" }),
+      short: fmt({ weekday: "short", month: "short", day: "numeric" }),
+    };
+  }
+
+  function normalizeSessions(list) {
+    if (!Array.isArray(list)) return [];
+    return list
+      .map((s) => ({
+        title: s && s.title ? String(s.title) : "",
+        date: dayKey(s && s.date),
+        time: (s && s.time) || "",
+        description: (s && s.description) || "",
+        link: (s && s.link) || "",
+      }))
+      .filter((s) => s.title && s.date);
+  }
+
   function normalize(raw) {
     let list = raw;
     if (typeof raw === "string") {
@@ -186,6 +266,7 @@ cc-events [hidden] { display: none !important; }
           description: m.description || "",
           order: typeof m.order === "number" ? m.order : i + 1,
           photos,
+          sessions: normalizeSessions(m.sessions),
         };
       })
       .sort((a, b) => a.order - b.order);
@@ -193,7 +274,7 @@ cc-events [hidden] { display: none !important; }
 
   class CcEvents extends HTMLElement {
     static get observedAttributes() {
-      return ["events", "heading", "eyebrow", "more-label"];
+      return ["events", "heading", "eyebrow", "more-label", "upcoming-label", "past-label", "link-label"];
     }
 
     constructor() {
@@ -215,7 +296,8 @@ cc-events [hidden] { display: none !important; }
       if (name === "events") this._readData();
       else if (name === "more-label") {
         if (this._items) this._renderGrid();
-      } else this._renderHead();
+      } else if (name === "heading" || name === "eyebrow") this._renderHead();
+      else if (this._current) this._renderSessions(this._current);
     }
 
     // Lets page code pass the array directly instead of an attribute.
@@ -264,6 +346,7 @@ cc-events [hidden] { display: none !important; }
                 <p class="cce-cap" data-d-count></p>
                 <div class="cce-thumbs" data-d-thumbs></div>
               </div>
+              <div class="cce-d-ses" data-d-ses></div>
             </div>
           </div>
         </div>`;
@@ -283,6 +366,7 @@ cc-events [hidden] { display: none !important; }
         dNav: $("[data-d-nav]"),
         dCount: $("[data-d-count]"),
         dThumbs: $("[data-d-thumbs]"),
+        dSes: $("[data-d-ses]"),
       };
 
       this._el.filters.addEventListener("click", (e) => {
@@ -300,11 +384,29 @@ cc-events [hidden] { display: none !important; }
         if (e.target === this._el.overlay) this._close();
       });
       $("[data-close]").addEventListener("click", () => this._close());
+      // Portrait photos (flyers, whiteboards) are shown whole instead of cropped.
+      this._el.dImg.addEventListener("load", () => {
+        const img = this._el.dImg;
+        img.classList.toggle("is-tall", img.naturalHeight > img.naturalWidth);
+      });
       $("[data-prev]").addEventListener("click", () => this._show(this._photo - 1));
       $("[data-next]").addEventListener("click", () => this._show(this._photo + 1));
       this._el.dThumbs.addEventListener("click", (e) => {
         const b = e.target.closest("[data-i]");
         if (b) this._show(Number(b.dataset.i));
+      });
+      this._el.dSes.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-all]");
+        if (!b) return;
+        const list = b.previousElementSibling;
+        list.querySelectorAll(".cce-ses[hidden]").forEach((li) => (li.hidden = false));
+        b.remove();
+        // Keep keyboard focus on the first session that was hidden.
+        const first = list.children[PAST_SHOWN];
+        if (first) {
+          first.tabIndex = -1;
+          first.focus();
+        }
       });
       this._onKey = (e) => {
         if (this._el.overlay.hidden) return;
@@ -366,9 +468,11 @@ cc-events [hidden] { display: none !important; }
     _renderGrid() {
       const list = this.events.filter((m) => this._filter === "all" || m.venue === this._filter);
       const label = this.getAttribute("more-label") || "View Details";
+      const today = todayKey();
       this._el.grid.innerHTML = list
         .map((m) => {
           const cover = m.photos[0];
+          const next = m.sessions.filter((s) => s.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
           return `
           <article class="cce-card">
             <div class="cce-media">
@@ -379,6 +483,7 @@ cc-events [hidden] { display: none !important; }
               ${m.venue ? `<p class="cce-loc">${PIN}${esc(m.venue)}</p>` : ""}
               <h3 class="cce-name">${esc(m.title)}</h3>
               <p class="cce-desc">${esc(m.description)}</p>
+              ${next ? `<p class="cce-next">${CALENDAR}<span>Next: ${esc(dayParts(next.date).short)}</span></p>` : ""}
               <button type="button" class="cce-more" data-open="${esc(m.id)}" aria-haspopup="dialog">${esc(label)} ${ARROW}</button>
             </div>
           </article>`;
@@ -408,11 +513,53 @@ cc-events [hidden] { display: none !important; }
         )
         .join("");
       this._show(0);
+      this._renderSessions(m);
       e.overlay.hidden = false;
       document.body.style.overflow = "hidden";
       e.dialog.scrollTop = 0;
       e.dialog.focus();
       this.dispatchEvent(new CustomEvent("open", { detail: { id: m.id, title: m.title }, bubbles: true, composed: true }));
+    }
+
+    // Upcoming sessions (soonest first), then past ones (newest first); only
+    // the first PAST_SHOWN past sessions show until "Show all" is pressed.
+    _renderSessions(m) {
+      const box = this._el.dSes;
+      const today = todayKey();
+      const byDate = [...m.sessions].sort((a, b) => a.date.localeCompare(b.date));
+      const upcoming = byDate.filter((s) => s.date >= today);
+      const past = byDate.filter((s) => s.date < today).reverse();
+      const linkLabel = this.getAttribute("link-label") || "Event page";
+      const item = (s, up, hidden) => {
+        const d = dayParts(s.date);
+        return `
+          <li class="cce-ses${up ? " is-up" : ""}"${hidden ? " hidden" : ""}>
+            <div class="cce-cal" aria-hidden="true">
+              <span class="cce-cal-m">${esc(d.month)}</span>
+              <span class="cce-cal-d">${esc(d.day)}</span>
+              <span class="cce-cal-y">${esc(d.year)}</span>
+            </div>
+            <div>
+              <p class="cce-ses-when">${esc(d.long)}${s.time ? ` · ${esc(s.time)}` : ""}</p>
+              <h4 class="cce-ses-title">${esc(s.title)}</h4>
+              ${s.description ? `<p class="cce-ses-desc">${esc(s.description)}</p>` : ""}
+              ${s.link ? `<a class="cce-ses-link" href="${esc(s.link)}" target="_blank" rel="noopener">${esc(linkLabel)} ${EXTERNAL}<span class="cce-sr"> (opens in a new tab)</span></a>` : ""}
+            </div>
+          </li>`;
+      };
+      const section = (label, list, up) => {
+        if (!list.length) return "";
+        const more = !up && list.length > PAST_SHOWN;
+        return (
+          `<h3 class="cce-ses-h">${esc(label)}</h3>` +
+          `<ul class="cce-ses-list">${list.map((s, i) => item(s, up, !up && i >= PAST_SHOWN)).join("")}</ul>` +
+          (more ? `<button type="button" class="cce-ses-all" data-all>Show all ${list.length} past sessions</button>` : "")
+        );
+      };
+      box.innerHTML =
+        section(this.getAttribute("upcoming-label") || "Upcoming sessions", upcoming, true) +
+        section(this.getAttribute("past-label") || "Past sessions", past, false);
+      box.hidden = m.sessions.length === 0;
     }
 
     _show(i) {

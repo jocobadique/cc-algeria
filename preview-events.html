@@ -15,11 +15,15 @@
   </main>
   <script src="dist/cc-events.js"></script>
   <script>
-    // Stand-in for the Wix page code: load the CMS export and pass it in like
+    // Stand-in for the Wix page code: load the CMS exports, attach each
+    // program's sessions and pass them in like
     // $w('#customElement1').setAttribute('events', JSON.stringify(items)).
-    fetch("sample-events.json")
-      .then((r) => r.json())
-      .then((items) => document.getElementById("events").setAttribute("events", JSON.stringify(items)));
+    Promise.all(["sample-events.json", "sample-sessions.json"].map((f) => fetch(f).then((r) => r.json()))).then(
+      ([items, sessions]) => {
+        items = items.map((e) => ({ ...e, sessions: sessions.filter((s) => s.program === e._id) }));
+        document.getElementById("events").setAttribute("events", JSON.stringify(items));
+      },
+    );
   </script>
 </body>
 </html>
