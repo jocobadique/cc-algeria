@@ -225,7 +225,9 @@ cc-partners [hidden] { display: none !important; }
     }
 
     // Sizes the band in pixels: from the top of the Wix section (covering the
-    // section's top margin) to band-depth below the top of the cards.
+    // section's top margin) to band-depth below the top of the cards. It starts
+    // 1px above the section, under the header's edge, because Wix places
+    // sections at fractional pixels and the blended edges show a light line.
     _placeBand() {
       const band = this._el.band;
       const color = this.getAttribute("band");
@@ -239,8 +241,8 @@ cc-partners [hidden] { display: none !important; }
       const depth = parseFloat(this.getAttribute("band-depth"));
       const reach = this._el.grid.getBoundingClientRect().top - top + (Number.isFinite(depth) ? depth : BAND_DEPTH);
       this.style.setProperty("--ccp-band", color);
-      band.style.top = `${-lift}px`;
-      band.style.height = `${lift + Math.max(0, Math.round(reach))}px`;
+      band.style.top = `${-lift - 1}px`;
+      band.style.height = `${lift + 1 + Math.max(0, Math.round(reach))}px`;
       band.hidden = false;
     }
 
