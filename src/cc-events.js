@@ -24,6 +24,13 @@
  *   upcoming-label, past-label — headings of the popup's session lists
  *                (default "Upcoming sessions", "Past sessions")
  *   link-label — text for a session's event page link (default "Event page")
+ *   band       — a color (like #d9f5f2) for a full-width band behind the filters
+ *                and the top of the cards, so they overlap the header above.
+ *                It runs up to the top of the Wix section, so the element
+ *                should be the first thing in its section.
+ *   band-depth — how far the band reaches into the first row of cards, in
+ *                pixels (default 140). Being in pixels, it stays put when a
+ *                filter leaves fewer cards.
  */
 (() => {
   const TAG = "cc-events";
@@ -54,6 +61,9 @@ cc-events {
 }
 cc-events *, cc-events *::before, cc-events *::after { box-sizing: border-box; }
 cc-events .cce { width: 100%; }
+cc-events[band] { position: relative; }
+cc-events[band] .cce-head, cc-events[band] .cce-filters, cc-events[band] .cce-grid { position: relative; }
+cc-events .cce-band { position: absolute; left: 0; right: 0; background: var(--cce-band); box-shadow: 0 0 0 100vmax var(--cce-band); clip-path: inset(0 -100vmax); pointer-events: none; }
 cc-events .cce-head { margin: 0 0 8px; }
 cc-events .cce-eyebrow { margin: 0 0 10px; font: 600 0.78rem/1.3 var(--cce-body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--cce-primary); }
 cc-events .cce-title { margin: 0; font: 500 clamp(2rem, 4vw, 3rem)/1.1 var(--cce-display); color: var(--cce-deep); text-wrap: balance; }
@@ -156,6 +166,8 @@ cc-events [hidden] { display: none !important; }
 
   // Past sessions shown before the "Show all" button.
   const PAST_SHOWN = 4;
+  // Default reach of the band into the first row of cards, in pixels.
+  const BAND_DEPTH = 140;
 
   function ensureAssets() {
     if (!document.querySelector(`link[data-${TAG}-fonts]`)) {
@@ -273,7 +285,7 @@ cc-events [hidden] { display: none !important; }
 
   class CcEvents extends HTMLElement {
     static get observedAttributes() {
-      return ["events", "heading", "eyebrow", "more-label", "upcoming-label", "past-label", "link-label"];
+      return ["events", "heading", "eyebrow", "more-label", "upcoming-label", "past-label", "link-label", "band", "band-depth"];
     }
 
     constructor() {
@@ -288,11 +300,17 @@ cc-events [hidden] { display: none !important; }
       ensureAssets();
       if (!this._built) this._build();
       this._readData();
+      // The band follows the layout: breakpoints, fonts loading, data arriving.
+      this._onResize = () => this._placeBand();
+      this._ro = new ResizeObserver(this._onResize);
+      this._ro.observe(this);
+      window.addEventListener("resize", this._onResize);
     }
 
     attributeChangedCallback(name) {
       if (!this._built) return;
       if (name === "events") this._readData();
+      else if (name === "band" || name === "band-depth") this._placeBand();
       else if (name === "more-label") {
         if (this._items) this._renderGrid();
       } else if (name === "heading" || name === "eyebrow") this._renderHead();
@@ -323,6 +341,7 @@ cc-events [hidden] { display: none !important; }
       this._built = true;
       this.innerHTML = `
         <div class="cce">
+          <div class="cce-band" aria-hidden="true" data-band hidden></div>
           <div class="cce-head" data-head hidden></div>
           <div class="cce-filters" role="group" aria-label="Filter events by venue" data-filters></div>
           <div class="cce-grid" data-grid aria-live="polite"></div>
@@ -352,6 +371,7 @@ cc-events [hidden] { display: none !important; }
 
       const $ = (s) => this.querySelector(s);
       this._el = {
+        band: $("[data-band]"),
         head: $("[data-head]"),
         filters: $("[data-filters]"),
         grid: $("[data-grid]"),
@@ -420,7 +440,29 @@ cc-events [hidden] { display: none !important; }
 
     disconnectedCallback() {
       if (this._onKey) document.removeEventListener("keydown", this._onKey);
+      if (this._ro) this._ro.disconnect();
+      if (this._onResize) window.removeEventListener("resize", this._onResize);
       document.body.style.overflow = "";
+    }
+
+    // Sizes the band in pixels: from the top of the Wix section (covering the
+    // section's top margin) to band-depth below the top of the cards.
+    _placeBand() {
+      const band = this._el.band;
+      const color = this.getAttribute("band");
+      if (!color) {
+        band.hidden = true;
+        return;
+      }
+      const top = this.getBoundingClientRect().top;
+      const section = this.parentElement && this.parentElement.closest("section");
+      const lift = section ? Math.max(0, Math.round(top - section.getBoundingClientRect().top)) : 0;
+      const depth = parseFloat(this.getAttribute("band-depth"));
+      const reach = this._el.grid.getBoundingClientRect().top - top + (Number.isFinite(depth) ? depth : BAND_DEPTH);
+      this.style.setProperty("--cce-band", color);
+      band.style.top = `${-lift}px`;
+      band.style.height = `${lift + Math.max(0, Math.round(reach))}px`;
+      band.hidden = false;
     }
 
     _renderHead() {

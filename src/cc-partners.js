@@ -16,6 +16,12 @@
  *   heading    — a heading above the grid (leave empty when the Wix page has its own)
  *   eyebrow    — small label above the heading
  *   link-label — text for the website link (default "Visit website")
+ *   band       — a color (like #d9f5f2) for a full-width band behind the top
+ *                of the cards, so they overlap the header above. It runs up
+ *                to the top of the Wix section, so the element should be the
+ *                first thing in its section.
+ *   band-depth — how far the band reaches into the first row of cards, in
+ *                pixels (default 140).
  */
 (() => {
   const TAG = "cc-partners";
@@ -44,6 +50,9 @@ cc-partners {
   -webkit-font-smoothing: antialiased;
 }
 cc-partners *, cc-partners *::before, cc-partners *::after { box-sizing: border-box; }
+cc-partners[band] { position: relative; }
+cc-partners[band] .ccp-head, cc-partners[band] .ccp-grid { position: relative; }
+cc-partners .ccp-band { position: absolute; left: 0; right: 0; background: var(--ccp-band); box-shadow: 0 0 0 100vmax var(--ccp-band); clip-path: inset(0 -100vmax); pointer-events: none; }
 cc-partners .ccp-head { margin: 0 0 32px; }
 cc-partners .ccp-eyebrow { margin: 0 0 10px; font: 600 0.78rem/1.3 var(--ccp-body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--ccp-primary); }
 cc-partners .ccp-title { margin: 0; font: 500 clamp(2rem, 4vw, 3rem)/1.1 var(--ccp-display); color: var(--ccp-deep); text-wrap: balance; }
@@ -54,8 +63,9 @@ cc-partners .ccp-grid { display: grid; grid-template-columns: repeat(3, minmax(0
 
 cc-partners .ccp-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccp-card); border: 1px solid var(--ccp-border); border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
 cc-partners .ccp-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(0, 60, 64, 0.45); }
-cc-partners .ccp-logo { display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 28px 36px; background: #fff; border-bottom: 1px solid var(--ccp-border); }
-cc-partners .ccp-logo img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
+cc-partners .ccp-logo { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 28px 36px; background: #fff; border-bottom: 1px solid var(--ccp-border); }
+/* Positioned inside the padding so a square or tall logo can't stretch the 16:9 box. */
+cc-partners .ccp-logo img { position: absolute; left: 36px; top: 28px; display: block; width: calc(100% - 72px); height: calc(100% - 56px); object-fit: contain; }
 cc-partners .ccp-mono { width: 96px; height: 96px; display: grid; place-items: center; border-radius: 50%; background: var(--ccp-secondary); color: var(--ccp-deep); font: italic 500 2.4rem/1 var(--ccp-display); }
 cc-partners .ccp-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
 cc-partners .ccp-name { margin: 0; font: 500 1.5rem/1.2 var(--ccp-display); color: var(--ccp-deep); text-wrap: balance; }
@@ -74,6 +84,9 @@ cc-partners [hidden] { display: none !important; }
 
   const ARROW =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+
+  // Default reach of the band into the first row of cards, in pixels.
+  const BAND_DEPTH = 140;
 
   function ensureAssets() {
     if (!document.querySelector(`link[data-${TAG}-fonts]`)) {
@@ -144,7 +157,7 @@ cc-partners [hidden] { display: none !important; }
 
   class CcPartners extends HTMLElement {
     static get observedAttributes() {
-      return ["partners", "heading", "eyebrow", "link-label"];
+      return ["partners", "heading", "eyebrow", "link-label", "band", "band-depth"];
     }
 
     constructor() {
@@ -156,11 +169,22 @@ cc-partners [hidden] { display: none !important; }
       ensureAssets();
       if (!this._built) this._build();
       this._readData();
+      // The band follows the layout: breakpoints, fonts loading, data arriving.
+      this._onResize = () => this._placeBand();
+      this._ro = new ResizeObserver(this._onResize);
+      this._ro.observe(this);
+      window.addEventListener("resize", this._onResize);
+    }
+
+    disconnectedCallback() {
+      if (this._ro) this._ro.disconnect();
+      if (this._onResize) window.removeEventListener("resize", this._onResize);
     }
 
     attributeChangedCallback(name) {
       if (!this._built) return;
       if (name === "partners") this._readData();
+      else if (name === "band" || name === "band-depth") this._placeBand();
       else if (name === "link-label") {
         if (this._items) this._renderGrid();
       } else this._renderHead();
@@ -189,10 +213,35 @@ cc-partners [hidden] { display: none !important; }
     _build() {
       this._built = true;
       this.innerHTML = `
+        <div class="ccp-band" aria-hidden="true" data-band hidden></div>
         <div class="ccp-head" data-head hidden></div>
         <div class="ccp-grid" data-grid aria-live="polite"></div>`;
-      this._el = { head: this.querySelector("[data-head]"), grid: this.querySelector("[data-grid]") };
+      this._el = {
+        band: this.querySelector("[data-band]"),
+        head: this.querySelector("[data-head]"),
+        grid: this.querySelector("[data-grid]"),
+      };
       this._renderHead();
+    }
+
+    // Sizes the band in pixels: from the top of the Wix section (covering the
+    // section's top margin) to band-depth below the top of the cards.
+    _placeBand() {
+      const band = this._el.band;
+      const color = this.getAttribute("band");
+      if (!color) {
+        band.hidden = true;
+        return;
+      }
+      const top = this.getBoundingClientRect().top;
+      const section = this.parentElement && this.parentElement.closest("section");
+      const lift = section ? Math.max(0, Math.round(top - section.getBoundingClientRect().top)) : 0;
+      const depth = parseFloat(this.getAttribute("band-depth"));
+      const reach = this._el.grid.getBoundingClientRect().top - top + (Number.isFinite(depth) ? depth : BAND_DEPTH);
+      this.style.setProperty("--ccp-band", color);
+      band.style.top = `${-lift}px`;
+      band.style.height = `${lift + Math.max(0, Math.round(reach))}px`;
+      band.hidden = false;
     }
 
     _renderHead() {

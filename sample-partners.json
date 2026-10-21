@@ -6,12 +6,16 @@
   },
   {
     "title": "Erie Blasco Library",
-    "collaboration": "Collaboration details coming soon.",
+    "logo": "wix:image://v1/884fc5_9b3dcf51a1d74563a3abc83bd3378ea5~mv2.png/884fc5_9b3dcf51a1d74563a3abc83bd3378ea5~mv2.png#originWidth=500&originHeight=500",
+    "collaboration": "Teen Mythology Guild\nTweens Mythology Guild\nYouth-Led Humanities Showcase",
+    "website": "https://catalog.erielibrary.org/polaris/",
     "order": 2
   },
   {
     "title": "Erie Children's Museum",
-    "collaboration": "Collaboration details coming soon.",
+    "logo": "wix:image://v1/884fc5_4020ca16b8dd4423af3c1de85dcc435c~mv2.png/884fc5_4020ca16b8dd4423af3c1de85dcc435c~mv2.png#originWidth=1725&originHeight=900",
+    "collaboration": "Value-Added Program at Children's Museum",
+    "website": "https://www.eriechildrensmuseum.org/",
     "order": 3
   }
 ]

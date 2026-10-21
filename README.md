@@ -94,6 +94,20 @@ Partners collection:
 
 Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"). On `cc-partners`: `link-label` (default "Visit website").
 
+### Cards overlapping the header
+
+Both elements can paint a full-width band behind their top so the cards overlap the native header above, like the band on the Events and Partners pages:
+
+- `band`: the band color, for example `#d9f5f2` (the header section's mint).
+- `band-depth`: how far the band reaches into the first row of cards, in pixels (default `140`).
+
+The band is sized in pixels from the layout, so it stays in place when a filter leaves fewer cards, at every breakpoint and with any number of items. In Studio:
+
+1. Give the header section (H1 and intro) the band color as its background.
+2. Give the cards section a plain background (no gradient), for example `#f7fdfd`.
+3. Make the element the first thing in the cards section. The band runs up to the top of the section to cover its top margin, so anything above the element in that section would be painted over.
+4. Set `band` (and `band-depth` if needed) in the element's attributes.
+
 ## How it renders
 
 - Light DOM, not a shadow root, so the monument names and descriptions are part of the page. Styles are injected once into `<head>` and scoped under `cc-algeria` with `cca-` class names, so they don't affect the rest of the site.
