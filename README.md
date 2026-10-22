@@ -9,6 +9,7 @@ The repo also holds two more elements built the same way, each for its own page 
 - `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery and the program's dated sessions from the **Sessions** collection.
 - `<cc-partners>`: the partners from the **Partners** collection, as logo cards with collaboration details and a website link.
 - `<cc-team>`: the team section on the homepage, from the **Team** collection: a wide card for the founder, then a card per member with photo, eyebrow, name and bio.
+- `<cc-videos>`: the educational videos on the homepage, from the **Videos** collection: a card per YouTube playlist with image, title, description and a Watch Playlist button.
 
 ## Use in Wix Studio
 
@@ -93,9 +94,16 @@ Partners collection:
 | Website | `website` | "Visit website" link, shown only when set |
 | Order | `order` | Card order |
 
-### Our Team (homepage)
+### Homepage: Our Team and Educational Videos
 
-Same setup, on the homepage: Server URL file `dist/cc-team.js`, tag name `cc-team`, page code `wix/team.page.js` (attribute `team`). The section's heading stays native Wix text above the element. If the homepage already has page code, add the query to its existing `$w.onReady`.
+Same setup, with two elements on the homepage and one page code file for both, `wix/home.page.js`:
+
+| Element | Server URL file | Tag name | Element ID in the page code | Attribute |
+| --- | --- | --- | --- | --- |
+| Our Team | `dist/cc-team.js` | `cc-team` | `#customElement1` | `team` |
+| Educational Videos | `dist/cc-videos.js` | `cc-videos` | `#customElement2` | `videos` |
+
+Each section's heading stays native Wix text above its element, and so do the YouTube channel boxes under the playlists ("100+ Educational Videos", "New Videos every week").
 
 Team collection:
 
@@ -110,6 +118,18 @@ Team collection:
 | Order | `order` | Card order |
 
 Optional attributes: `eyebrow` and `heading`, `more-label` and `less-label` (bio toggle, default "Read more" and "Show less"), `link-label` (used when Link Label is empty, default "Learn more").
+
+Videos collection (one item per playlist; the client adds new ones here):
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Playlist Title | `title` | Card heading. A line break is kept, for a title in two languages |
+| Description | `description` | Card text. Blank lines between paragraphs are kept |
+| Image | `image` | Card image, cropped to 16:9 (1600 × 900 fits exactly); without one the card shows a teal panel |
+| YouTube Link | `link` | The Watch Playlist button and the image, opening in a new tab; without one the card has no button |
+| Order | `order` | Card order |
+
+Optional attributes: `eyebrow` and `heading`, `button-label` (default "Watch Playlist", as on the original page).
 
 ### Events and Partners attributes
 
@@ -143,5 +163,5 @@ The band is sized in pixels from the layout, so it stays in place when a filter 
 
 - Edit the elements in `src/`.
 - `python build.py v1.1.0` writes every `src/cc-*.js` to `dist/` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URLs.
-- `preview.html`, `preview-events.html`, `preview-partners.html` and `preview-team.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`), `sample-partners.json` and `sample-team.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
+- `preview.html`, `preview-events.html`, `preview-partners.html`, `preview-team.html` and `preview-videos.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`), `sample-partners.json`, `sample-team.json` and `sample-videos.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
 - `node shoot.cjs 375,768,1366` saves full-page and popup screenshots to `shots/` (needs `npm i playwright`).

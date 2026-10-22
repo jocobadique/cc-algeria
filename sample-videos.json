@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Global Voices | Voces del Mundo",
+    "description": "[English] Histories in Motion — a journey through the stories, languages, and experiences that connect us across borders. In this series, students and changemakers from around the world share their cultures, traditions, and perspectives — reminding us that every voice adds to the global conversation.\n\n[Español] Historias en Movimiento — un viaje a través de las historias, los idiomas y las experiencias que nos unen más allá de las fronteras. En esta serie, estudiantes y líderes de todo el mundo comparten sus culturas, tradiciones y perspectivas, recordándonos que cada voz enriquece la conversación global.",
+    "link": "https://www.youtube.com/playlist?list=PLsNrhvzkg7-gHD-kzdFmkY7fD7DkIMGqz",
+    "order": 1
+  },
+  {
+    "title": "NSLI-Y & South Korea",
+    "description": "Follow my journey through South Korea as a NSLI-Y (National Security Language Initiative for Youth) student! From learning Korean and exploring local traditions to everyday adventures and cultural experiences, this playlist shares what life was really like during my time abroad. I hope these videos inspire you to learn more about Korea and the opportunities that programs like NSLI-Y can offer.",
+    "link": "https://www.youtube.com/playlist?list=PLeJgnNyaLEB0",
+    "order": 2
+  },
+  {
+    "title": "Classics in English | Clásicos en inglés",
+    "description": "Explore Greek & Roman mythology, history, and philosophy through engaging student-created videos",
+    "link": "https://www.youtube.com/playlist?list=PLsNrhvzkg7-io4RV8kIjMJI2-ZhusnKL_",
+    "order": 3
+  },
+  {
+    "title": "Classics for the Hispanic Heart\nClásicas para el corazón hispano",
+    "description": "Sumérgete en el fascinante mundo de los mitos, la literatura y la filosofía antiguas. Estos videos exploran historias eternas de Grecia y Roma — desde el amor de Psique hasta la furia de Ares — y muestran cómo las ideas clásicas siguen influyendo en nuestro mundo actual.",
+    "link": "https://www.youtube.com/playlist?list=PLsNrhvzkg7-hV10eTURTly5UKJ_SQjawO",
+    "order": 4
+  }
+]
