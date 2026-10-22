@@ -77,16 +77,17 @@ cc-team .cct-link { margin-top: auto; padding-top: 14px; align-self: flex-start;
 
 /* Founder: a full-width card in the mint, photo beside the text. */
 cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-secondary); border-color: transparent; }
-cc-team .cct-founder .cct-photo { width: 200px; height: 200px; border: 0; }
+cc-team .cct-founder .cct-photo { width: 300px; height: 300px; border: 0; }
 cc-team .cct-founder .cct-photo img { object-position: center; }
-cc-team .cct-founder .cct-mono { top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 160px; height: 160px; background: #fff; font-size: 3.6rem; }
+cc-team .cct-founder .cct-mono { top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 70%; height: 70%; background: #fff; font-size: 4rem; }
+@media (max-width: 960px) { cc-team .cct-founder .cct-photo { width: 240px; height: 240px; } }
 cc-team .cct-founder .cct-name { font-size: clamp(2.2rem, 4vw, 2.8rem); }
 cc-team .cct-founder .cct-bio { font-size: 1.02rem; color: var(--cct-fg); opacity: .82; max-width: 62ch; }
 @media (max-width: 640px) {
   cc-team .cct-card { padding: 24px; }
   cc-team .cct-founder { flex-direction: column; align-items: flex-start; gap: 18px; padding: 28px 24px; }
   cc-team .cct-photo { height: 210px; }
-  cc-team .cct-founder .cct-photo { width: 150px; height: 150px; }
+  cc-team .cct-founder .cct-photo { width: 220px; height: 220px; }
   cc-team .cct-founder .cct-photo img { object-position: left center; }
 }
 
@@ -256,7 +257,7 @@ cc-team [hidden] { display: none !important; }
       const fallbackLink = this.getAttribute("link-label") || "Learn more";
       this._el.grid.innerHTML = this.team
         .map((m) => {
-          const size = m.founder ? 400 : 480;
+          const size = m.founder ? 640 : 480;
           const bioId = `cct-bio-${m.id}`;
           return `
           <article class="cct-card${m.founder ? " cct-founder" : ""}">
