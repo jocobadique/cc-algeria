@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team preview</title>
+  <style>
+    /* Like the homepage: a native heading, then the element in the same section. */
+    body { margin: 0; background: #f7fdfd; font-family: Poppins, system-ui, sans-serif; color: #003c40; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+    .team { padding: 88px 0; }
+    .team p:first-child { margin: 0 0 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #006a68; }
+    .team h2 { margin: 0 0 40px; font: 500 clamp(1.9rem, 3.4vw, 2.9rem)/1.12 Fraunces, Georgia, serif; }
+  </style>
+</head>
+<body>
+  <section class="team">
+    <div class="wrap">
+      <p>Classic Compass</p>
+      <h2>Our Team</h2>
+      <cc-team id="team"></cc-team>
+    </div>
+  </section>
+  <script src="dist/cc-team.js"></script>
+  <script>
+    // Stand-in for the Wix page code: load the CMS export and pass it in like
+    // $w('#customElement1').setAttribute('team', JSON.stringify(items)).
+    fetch("sample-team.json")
+      .then((r) => r.json())
+      .then((items) => document.getElementById("team").setAttribute("team", JSON.stringify(items)));
+  </script>
+</body>
+</html>

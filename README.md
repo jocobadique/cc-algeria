@@ -8,6 +8,7 @@ The repo also holds two more elements built the same way, each for its own page 
 
 - `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery and the program's dated sessions from the **Sessions** collection.
 - `<cc-partners>`: the partners from the **Partners** collection, as logo cards with collaboration details and a website link.
+- `<cc-team>`: the team section on the homepage, from the **Team** collection: a wide card for the founder, then a card per member with photo, eyebrow, name and bio.
 
 ## Use in Wix Studio
 
@@ -92,6 +93,26 @@ Partners collection:
 | Website | `website` | "Visit website" link, shown only when set |
 | Order | `order` | Card order |
 
+### Our Team (homepage)
+
+Same setup, on the homepage: Server URL file `dist/cc-team.js`, tag name `cc-team`, page code `wix/team.page.js` (attribute `team`). The section's heading stays native Wix text above the element. If the homepage already has page code, add the query to its existing `$w.onReady`.
+
+Team collection:
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Name | `title` | Card heading |
+| Eyebrow | `eyebrow` | Small label above the name |
+| Bio | `bio` | Card text. Long bios are cut to 6 lines with a "Read more" toggle; the full text is always in the page |
+| Photo | `photo` | Shown whole (fitted, not cropped), standing on the bottom edge of the photo area, since the photos are cutouts in many shapes; without one the card shows the name's initial |
+| Founder | `isFounder` | Puts the member in the wide mint card on top |
+| Link URL / Link Label | `linkUrl`, `linkLabel` | A link under the bio (new tab), when Link URL is set |
+| Order | `order` | Card order |
+
+Optional attributes: `eyebrow` and `heading`, `more-label` and `less-label` (bio toggle, default "Read more" and "Show less"), `link-label` (used when Link Label is empty, default "Learn more").
+
+### Events and Partners attributes
+
 Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"). On `cc-partners`: `link-label` (default "Visit website").
 
 ### Cards overlapping the header
@@ -122,5 +143,5 @@ The band is sized in pixels from the layout, so it stays in place when a filter 
 
 - Edit the elements in `src/`.
 - `python build.py v1.1.0` writes every `src/cc-*.js` to `dist/` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URLs.
-- `preview.html`, `preview-events.html` and `preview-partners.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`) and `sample-partners.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
+- `preview.html`, `preview-events.html`, `preview-partners.html` and `preview-team.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`), `sample-partners.json` and `sample-team.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
 - `node shoot.cjs 375,768,1366` saves full-page and popup screenshots to `shots/` (needs `npm i playwright`).
