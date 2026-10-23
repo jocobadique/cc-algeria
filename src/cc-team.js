@@ -78,7 +78,8 @@ cc-team .cct-link { margin-top: auto; padding-top: 14px; align-self: flex-start;
 /* Founder: a full-width card in the mint, photo beside the text. */
 cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-secondary); border-color: transparent; }
 cc-team .cct-founder .cct-photo { width: 300px; height: 300px; border: 0; }
-cc-team .cct-founder .cct-photo img { object-position: center; }
+cc-team .cct-founder .cct-photo img { object-position: center; transition: opacity .25s; }
+cc-team .cct-photo img[data-trim]:not(.is-ready) { opacity: 0; }
 cc-team .cct-founder .cct-mono { top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 70%; height: 70%; background: #fff; font-size: 4rem; }
 @media (max-width: 960px) { cc-team .cct-founder .cct-photo { width: 240px; height: 240px; } }
 cc-team .cct-founder .cct-name { font-size: clamp(2.2rem, 4vw, 2.8rem); }
@@ -133,6 +134,51 @@ cc-team [hidden] { display: none !important; }
       return `https://static.wixstatic.com/media/${id}/v1/fit/w_${size},h_${size},q_85,enc_auto/${id}`;
     }
     return v;
+  }
+
+  // Some photos come with wide transparent margins (Silvia's round graphic
+  // fills only the middle two thirds), which makes them look small in the
+  // founder box. Cut the margins off and show the trimmed copy. Without CORS
+  // the canvas can't be read, and the photo is shown as it is.
+  function trimTransparent(img) {
+    const done = () => img.classList.add("is-ready");
+    if (img.dataset.trimmed) return done();
+    img.dataset.trimmed = "1";
+    try {
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const alpha = ctx.getImageData(0, 0, w, h).data;
+      let top = h, left = w, right = -1, bottom = -1;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          if (alpha[(y * w + x) * 4 + 3] > 8) {
+            if (x < left) left = x;
+            if (x > right) right = x;
+            if (y < top) top = y;
+            bottom = y;
+          }
+        }
+      }
+      const cw = right - left + 1;
+      const ch = bottom - top + 1;
+      if (right < 0 || (cw > w * 0.95 && ch > h * 0.95)) return done();
+      const out = document.createElement("canvas");
+      out.width = cw;
+      out.height = ch;
+      out.getContext("2d").drawImage(canvas, left, top, cw, ch, 0, 0, cw, ch);
+      out.toBlob((blob) => {
+        if (!blob) return done();
+        img.addEventListener("load", done, { once: true });
+        img.src = URL.createObjectURL(blob);
+      });
+    } catch (err) {
+      done();
+    }
   }
 
   function normalize(raw) {
@@ -261,7 +307,7 @@ cc-team [hidden] { display: none !important; }
           return `
           <article class="cct-card${m.founder ? " cct-founder" : ""}">
             <div class="cct-photo">
-              ${m.photo ? `<img src="${esc(photoUrl(m.photo, size))}" alt="${esc(m.title)}" loading="lazy">` : `<span class="cct-mono" aria-hidden="true">${esc(m.title[0])}</span>`}
+              ${m.photo ? `<img${m.founder ? ' crossorigin="anonymous" data-trim' : ""} src="${esc(photoUrl(m.photo, size))}" alt="${esc(m.title)}" loading="lazy">` :`<span class="cct-mono" aria-hidden="true">${esc(m.title[0])}</span>`}
             </div>
             <div class="cct-text">
               ${m.eyebrow ? `<p class="cct-eyebrow">${esc(m.eyebrow)}</p>` : ""}
@@ -273,6 +319,15 @@ cc-team [hidden] { display: none !important; }
           </article>`;
         })
         .join("");
+      this._el.grid.querySelectorAll("img[data-trim]").forEach((img) => {
+        if (img.complete) {
+          if (img.naturalWidth) trimTransparent(img);
+          else img.classList.add("is-ready");
+        } else {
+          img.addEventListener("load", () => trimTransparent(img), { once: true });
+          img.addEventListener("error", () => img.classList.add("is-ready"), { once: true });
+        }
+      });
       this._fitBios();
     }
 

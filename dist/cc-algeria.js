@@ -1,4 +1,4 @@
-/*! cc-algeria v1.5.1 */
+/*! cc-algeria v1.5.2 */
 /*
  * <cc-algeria> — Classic Compass "Algeria Initiative" monument explorer.
  * A Wix custom element for the Classic Compass Wix Studio site
