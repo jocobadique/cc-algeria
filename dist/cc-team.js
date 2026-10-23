@@ -1,4 +1,4 @@
-/*! cc-team v1.5.0 */
+/*! cc-team v1.5.1 */
 /*
  * <cc-team> — Classic Compass "Our Team" grid for the homepage.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -88,8 +88,7 @@ cc-team .cct-founder .cct-bio { font-size: 1.02rem; color: var(--cct-fg); opacit
   cc-team .cct-card { padding: 24px; }
   cc-team .cct-founder { flex-direction: column; align-items: flex-start; gap: 18px; padding: 28px 24px; }
   cc-team .cct-photo { height: 210px; }
-  cc-team .cct-founder .cct-photo { width: 220px; height: 220px; }
-  cc-team .cct-founder .cct-photo img { object-position: left center; }
+  cc-team .cct-founder .cct-photo { align-self: center; width: 220px; height: 220px; }
 }
 
 cc-team .cct-skel { background: linear-gradient(90deg, var(--cct-secondary), #eefaf8, var(--cct-secondary)); background-size: 200% 100%; animation: cct-shimmer 1.4s infinite; border-radius: 28px; min-height: 280px; }
