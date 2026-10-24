@@ -1,4 +1,4 @@
-/*! cc-videos v1.6.2 */
+/*! cc-videos v1.7.0 */
 /*
  * <cc-videos> — Classic Compass "Educational Videos" playlists for the homepage.
  * A Wix custom element for the Classic Compass Wix Studio site

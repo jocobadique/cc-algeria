@@ -33,7 +33,9 @@
         "src": "wix:image://v1/d788fe_07b80841a1384f8ba41613a014dd1531~mv2.jpg/events-teen-6-odin-maze.jpg#originWidth=1506&originHeight=2000",
         "title": ""
       }
-    ]
+    ],
+    "impactFacts": "60 Teens\nNov 2025 – present\nOnce a month",
+    "impactPoints": "This event is run by local teens from Classic Compass\nFolklore fun with discussions, creative crafts and epic games about Mythology from around the world - Greek, Norse, Egyptian, Japanese, and beyond\nMythology Trivia, Maya Folklore, Gods & Goddesses of the Sun, Dragons, Gods/Goddess of Earth/Harvest, Indigenous Folklore, Mythology Themed Valentines, Myth Maps and Modern Mashups, Language through Craft, Myth Maker Zines"
   },
   {
     "_id": "bf21d9e4-5bdc-4f4c-990d-269edf976bb9",
@@ -64,7 +66,10 @@
         "src": "wix:image://v1/d788fe_d54980728fae4babba019557ac1fd8f2~mv2.jpg/events-tween-5-flyer-july.jpg#originWidth=1545&originHeight=1999",
         "title": ""
       }
-    ]
+    ],
+    "sponsor": "Sponsored by Paideia’s 2026 Summer Teaching Literacy with Latin Grant",
+    "impactFacts": "30 Tweens\nJune 2026 – July 2026",
+    "impactPoints": "Expanded the Teen Mythology Guild into an engaging introduction to Latin language, Roman mythology, and classical storytelling for younger learners\nThe Middle School (Tween) Mythology Guild will introduce students to myths from Ancient Greece and Rome through interactive lessons, hands-on crafts, collaborative games, and beginner Latin vocabulary\nSessions focussed on stories such as Theseus and the Minotaur, Persephone, Medusa, and Roman mythological creatures"
   },
   {
     "_id": "dda29f8c-3be6-4389-a0c5-3c0f68a5add9",
@@ -90,7 +95,9 @@
         "src": "wix:image://v1/d788fe_0160b5aaa408429f96d4ee34fd632785~mv2.jpg/events-youth-4-announcement.jpg#originWidth=940&originHeight=788",
         "title": ""
       }
-    ]
+    ],
+    "impactFacts": "Special Needs Ages 13-18 (Grade 8-12)\n100 people including accompanying guardians/families\nJan 26 – Apr 6 2026",
+    "impactPoints": "Stories that Shape us: exploring the wild, weird, wonderful world of folklore. Each week, we jump into legends, ancient tales, family traditions, and myths\nEach participant receives a research kit, sketch book, art supplies, bookmark, poem magnets etc\nBuild a public art/ creative writing showcase that celebrates story telling"
   },
   {
     "_id": "7384eb64-f9ff-45a4-8020-836089940e3a",
@@ -126,7 +133,10 @@
         "src": "wix:image://v1/d788fe_8976d25b18b54748b32e1808ac41d871~mv2.jpg/events-museum-6-sign.jpg#originWidth=1500&originHeight=2000",
         "title": ""
       }
-    ]
+    ],
+    "sponsor": "Sponsored by Paideia’s 2026 Summer Teaching Literacy with Latin Grant",
+    "impactFacts": "Approx 50 students\nKindergarten through 8th grade\nJune 17",
+    "impactPoints": "Mythology with Classic Compass: a large-scale mythology workshop at the Erie Children’s Museum\nMythology, Mazes, and more: “Hide Your Monster” workshop inspired by the myth of Theseus and the Minotaur. Students will design and build their own mythological creatures and labyrinth-themed crafts\nThe workshop will introduce younger students to classical mythology in an accessible and memorable way while encouraging creativity"
   },
   {
     "_id": "67cdad07-c78e-4540-a0a1-61b77591fce4",
@@ -134,6 +144,9 @@
     "venue": "Blasco Memorial Library",
     "audience": "",
     "description": "This workshop will introduce high school students to National Security Language Initiative for Youth (NSLI-Y) and international exchange opportunities.",
-    "order": 5
+    "order": 5,
+    "sponsor": "Sponsored by US Dept of State NSLI-Y 20th Anniversary Alumni Grant",
+    "impactFacts": "3 workshops\nNovember 2026",
+    "impactPoints": "Library Workshop: Discover Korean: Language, Stories & Culture (approx 20 students)\nLibrary Workshop: From Erie to Seoul: NSLI-Y & International Exchange (approx 20 students)\nScouts Workshop: Discover Korean & NSLI-Y, at a Scouts Pack Meeting (approx 30 students)\nPodcast: International Exchange Perspectives with Fulbright FLTAs Yu Jen Chang and/or Rania Al Qiq, about language learning and international exchange\nBlog Posts/ VLogs from fellow NSLI-Y Alumni, published on the Classic Compass website and social media"
   }
 ]

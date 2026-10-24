@@ -5,27 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Impact preview</title>
   <style>
-    /* Like the Events page: a native heading, then the element in the same light mint section. */
-    body { margin: 0; background: #e6f8f5; font-family: Poppins, system-ui, sans-serif; color: #003c40; }
+    /* Like the Impact page: a native mint header with the H1, then the element in its own section. */
+    body { margin: 0; background: #f7fdfd; font-family: Poppins, system-ui, sans-serif; color: #003c40; }
     .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-    .impact { padding: 88px 0; }
-    .impact h2 { max-width: 760px; margin: 0 auto 52px; text-align: center; font: 500 clamp(1.9rem, 3.4vw, 2.9rem)/1.12 Fraunces, Georgia, serif; }
+    .hero { background: #d9f5f2; padding: 72px 0 56px; }
+    .hero p { margin: 0 0 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #006a68; }
+    .hero h1 { margin: 0; font: 700 clamp(2.6rem, 6vw, 4rem)/1.05 Fraunces, Georgia, serif; }
+    .impact { padding: 56px 0 88px; }
   </style>
 </head>
 <body>
+  <section class="hero">
+    <div class="wrap">
+      <p>Classic Compass</p>
+      <h1>Impact</h1>
+    </div>
+  </section>
   <section class="impact">
     <div class="wrap">
-      <h2>Impact</h2>
-      <cc-impact id="impact"></cc-impact>
+      <cc-impact id="impact" heading-level="2"></cc-impact>
     </div>
   </section>
   <script src="dist/cc-impact.js"></script>
   <script>
-    // Stand-in for the Wix page code: load the CMS export and pass it in like
-    // $w("#customElement2").setAttribute("impact", JSON.stringify(items)).
-    fetch("sample-impact.json")
-      .then((r) => r.json())
-      .then((items) => document.getElementById("impact").setAttribute("impact", JSON.stringify(items)));
+    // Stand-in for wix/impact.page.js: load the CMS exports and pass them in like
+    // $w("#customElement1").setAttribute("programs" / "impact", JSON.stringify(items)).
+    Promise.all(["sample-impact.json", "sample-events.json"].map((f) => fetch(f).then((r) => r.json()))).then(([impact, programs]) => {
+      const el = document.getElementById("impact");
+      el.setAttribute("programs", JSON.stringify(programs));
+      el.setAttribute("impact", JSON.stringify(impact));
+    });
   </script>
 </body>
 </html>

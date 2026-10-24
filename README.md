@@ -131,9 +131,21 @@ Videos collection (one item per playlist; the client adds new ones here):
 
 Optional attributes: `eyebrow` and `heading`, `button-label` (default "Watch Playlist", as on the original page).
 
-### Impact numbers
+### Impact page
 
-On the Events page, below the program cards, in its own section with a native heading. Same setup again: Server URL file `dist/cc-impact.js`, tag name `cc-impact`, attribute `impact`. The Events page code, `wix/events.page.js`, loads it for `#customElement2` (the program cards are `#customElement1`).
+`<cc-impact>` is the Impact page (a one-pager): the numbers, an overview card per program, then the target outcomes. The page's H1 stays native Wix text above it. Same setup again: Server URL file `dist/cc-impact.js`, tag name `cc-impact`, page code `wix/impact.page.js`, which passes the Impact collection on `impact` and the Events collection on `programs`. Set `heading-level="2"` on the element, since only the H1 is above it.
+
+Page order: the Impact items without a group (the numbers), then the program cards, then each group of Impact items (for example the target outcomes).
+
+Program cards come from three fields on the **Events** collection; a program with all three empty gets no card:
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Impact: Sponsor | `sponsor` | Line with an award icon under the program name |
+| Impact: Key Facts | `impactFacts` | Chips, one per line (audience, numbers, dates) |
+| Impact: Overview Points | `impactPoints` | Bulleted list, one point per line |
+
+The card also uses the program's Program Name, Venue, Cover Image (a teal panel with the initial when empty) and Order.
 
 Impact collection (one item per number):
 
@@ -146,7 +158,7 @@ Impact collection (one item per number):
 | Order | `order` | Tile order (and group order, by each group's first item) |
 | Published | `published` | Unchecked items are hidden |
 
-Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"). The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
+Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 
 ### Events and Partners attributes
 

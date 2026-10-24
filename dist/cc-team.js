@@ -1,4 +1,4 @@
-/*! cc-team v1.6.2 */
+/*! cc-team v1.7.0 */
 /*
  * <cc-team> — Classic Compass "Our Team" grid for the homepage.
  * A Wix custom element for the Classic Compass Wix Studio site
