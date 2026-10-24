@@ -158,7 +158,7 @@ Impact collection (one item per number):
 | Order | `order` | Tile order (and group order, by each group's first item) |
 | Published | `published` | Unchecked items are hidden |
 
-Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
+Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). `band` and `band-depth` work as on the Events and Partners elements (see [Cards overlapping the header](#cards-overlapping-the-header)); on the Impact page the band reaches into the first row of number tiles. The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 
 ### Events and Partners attributes
 
@@ -166,7 +166,7 @@ Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-labe
 
 ### Cards overlapping the header
 
-Both elements can paint a full-width band behind their top so the cards overlap the native header above, like the band on the Events and Partners pages:
+`cc-events`, `cc-partners` and `cc-impact` can paint a full-width band behind their top so the cards overlap the native header above, like the band on the Events and Partners pages:
 
 - `band`: the band color, for example `#d9f5f2` (the header section's mint).
 - `band-depth`: how far the band reaches into the first row of cards, in pixels (default `140`).

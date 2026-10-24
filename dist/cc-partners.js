@@ -1,4 +1,4 @@
-/*! cc-partners v1.7.0 */
+/*! cc-partners v1.7.1 */
 /*
  * <cc-partners> — Classic Compass "Our Partners" grid.
  * A Wix custom element for the Classic Compass Wix Studio site

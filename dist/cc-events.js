@@ -1,4 +1,4 @@
-/*! cc-events v1.7.0 */
+/*! cc-events v1.7.1 */
 /*
  * <cc-events> — Classic Compass "Events" program explorer.
  * A Wix custom element for the Classic Compass Wix Studio site

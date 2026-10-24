@@ -1,4 +1,4 @@
-/*! cc-impact v1.7.0 */
+/*! cc-impact v1.7.1 */
 /*
  * <cc-impact> — Classic Compass impact numbers.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -38,6 +38,12 @@
  *   heading-level    — level of the group and programs headings, 2 or 3 (default 3,
  *                      for a section under a native H2; use 2 on a page whose H1 is the
  *                      only heading above). Program names are one level below.
+ *   band             — a color (like #d9f5f2) for a full-width band behind the top
+ *                      of the first row, so it overlaps the header above, as on the
+ *                      Events and Partners pages. It runs up to the top of the Wix
+ *                      section, so the element should be the first thing in its section.
+ *   band-depth       — how far the band reaches into the first row, in pixels
+ *                      (default 140).
  */
 (() => {
   const TAG = "cc-impact";
@@ -67,6 +73,9 @@ cc-impact {
   -webkit-font-smoothing: antialiased;
 }
 cc-impact *, cc-impact *::before, cc-impact *::after { box-sizing: border-box; }
+cc-impact[band] { position: relative; }
+cc-impact[band] .cci-head, cc-impact[band] .cci-groups { position: relative; }
+cc-impact .cci-band { position: absolute; left: 0; right: 0; background: var(--cci-band); box-shadow: 0 0 0 100vmax var(--cci-band); clip-path: inset(0 -100vmax); pointer-events: none; }
 cc-impact .cci-head { margin: 0 auto 52px; max-width: 760px; text-align: center; }
 cc-impact .cci-eyebrow { margin: 0 0 12px; font: 600 0.78rem/1.4 var(--cci-body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--cci-primary); }
 cc-impact .cci-title { margin: 0; font: 500 clamp(1.9rem, 3.4vw, 2.9rem)/1.12 var(--cci-display); color: var(--cci-deep); text-wrap: balance; }
@@ -151,6 +160,9 @@ cc-impact [hidden] { display: none !important; }
   const esc = (s) =>
     String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
+  // Default reach of the band into the first row, in pixels.
+  const BAND_DEPTH = 140;
+
   // Columns that leave the fewest tiles alone on the last row: 5 -> 3 + 2, 7 -> 4 + 3.
   const columns = (n) => (n <= 4 ? Math.max(n, 1) : n % 4 === 0 || n % 4 === 3 ? 4 : 3);
 
@@ -227,7 +239,7 @@ cc-impact [hidden] { display: none !important; }
 
   class CcImpact extends HTMLElement {
     static get observedAttributes() {
-      return ["impact", "programs", "heading", "eyebrow", "pending-label", "programs-heading", "heading-level"];
+      return ["impact", "programs", "heading", "eyebrow", "pending-label", "programs-heading", "heading-level", "band", "band-depth"];
     }
 
     constructor() {
@@ -240,11 +252,22 @@ cc-impact [hidden] { display: none !important; }
       ensureAssets();
       if (!this._built) this._build();
       this._readData();
+      // The band follows the layout: breakpoints, fonts loading, data arriving.
+      this._onResize = () => this._placeBand();
+      this._ro = new ResizeObserver(this._onResize);
+      this._ro.observe(this);
+      window.addEventListener("resize", this._onResize);
+    }
+
+    disconnectedCallback() {
+      if (this._ro) this._ro.disconnect();
+      if (this._onResize) window.removeEventListener("resize", this._onResize);
     }
 
     attributeChangedCallback(name) {
       if (!this._built) return;
-      if (name === "impact" || name === "programs") this._readData();
+      if (name === "band" || name === "band-depth") this._placeBand();
+      else if (name === "impact" || name === "programs") this._readData();
       else if (name === "heading" || name === "eyebrow") this._renderHead();
       else if (this._items) this._renderGroups();
     }
@@ -282,13 +305,38 @@ cc-impact [hidden] { display: none !important; }
     _build() {
       this._built = true;
       this.innerHTML = `
+        <div class="cci-band" aria-hidden="true" data-band hidden></div>
         <div class="cci-head" data-head hidden></div>
-        <div data-groups aria-live="polite"></div>`;
+        <div class="cci-groups" data-groups aria-live="polite"></div>`;
       this._el = {
+        band: this.querySelector("[data-band]"),
         head: this.querySelector("[data-head]"),
         groups: this.querySelector("[data-groups]"),
       };
       this._renderHead();
+    }
+
+    // Sizes the band in pixels, like <cc-events> and <cc-partners>: from 1px
+    // above the top of the Wix section (covering its top margin and the light
+    // seam Wix's fractional section edges leave) to band-depth below the top
+    // of the first row of tiles or cards.
+    _placeBand() {
+      const band = this._el.band;
+      const color = this.getAttribute("band");
+      if (!color) {
+        band.hidden = true;
+        return;
+      }
+      const top = this.getBoundingClientRect().top;
+      const section = this.parentElement && this.parentElement.closest("section");
+      const lift = section ? Math.max(0, Math.round(top - section.getBoundingClientRect().top)) : 0;
+      const depth = parseFloat(this.getAttribute("band-depth"));
+      const row = this._el.groups.querySelector(".cci-grid, .cci-progs") || this._el.groups;
+      const reach = row.getBoundingClientRect().top - top + (Number.isFinite(depth) ? depth : BAND_DEPTH);
+      this.style.setProperty("--cci-band", color);
+      band.style.top = `${-lift - 1}px`;
+      band.style.height = `${lift + 1 + Math.max(0, Math.round(reach))}px`;
+      band.hidden = false;
     }
 
     _renderHead() {
