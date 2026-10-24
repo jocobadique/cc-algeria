@@ -146,7 +146,7 @@ Impact collection (one item per number):
 | Order | `order` | Tile order (and group order, by each group's first item) |
 | Published | `published` | Unchecked items are hidden |
 
-Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"). Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
+Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"). The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 
 ### Events and Partners attributes
 

@@ -37,6 +37,7 @@
   const CSS = `
 cc-impact {
   --cci-card: #ffffff;
+  --cci-pending-bg: #ffffff;
   --cci-fg: #0f2a2c;
   --cci-primary: #008381;
   --cci-deep: #003c40;
@@ -79,7 +80,7 @@ cc-impact .cci-label { margin: 0; font: 500 1rem/1.45 var(--cci-body); color: va
 cc-impact .cci-detail { margin: 4px 0 0; padding-top: 12px; border-top: 1px solid var(--cci-border); font-size: 0.85rem; line-height: 1.5; color: var(--cci-muted); white-space: pre-line; }
 
 /* A tile whose number isn't known yet. */
-cc-impact .cci-tile.is-pending { background: rgba(255, 255, 255, 0.6); border-top-color: var(--cci-accent); box-shadow: none; outline: 1.5px dashed var(--cci-border); outline-offset: -1.5px; }
+cc-impact .cci-tile.is-pending { background: var(--cci-pending-bg); border-top-color: var(--cci-accent); box-shadow: none; outline: 1.5px dashed var(--cci-border); outline-offset: -1.5px; }
 cc-impact .cci-pending { align-self: flex-start; margin: 6px 0 10px; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--cci-secondary); color: var(--cci-deep); font: 600 0.78rem/1.2 var(--cci-body); letter-spacing: 0.08em; text-transform: uppercase; }
 cc-impact .cci-pending::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cci-primary); animation: cci-pulse 1.8s ease-in-out infinite; }
 @keyframes cci-pulse { 50% { opacity: 0.3; } }
