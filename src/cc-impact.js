@@ -10,7 +10,9 @@
  * Each item is one number: the number itself (`value`, free text such as
  * "60", "approx. 50" or "75%"), the label under it and an optional detail
  * line (program and dates). Items with the same `group` are shown together
- * under that group's name; items without a group come first, with no heading.
+ * under that group's name (an H3, below the section's H2, whether that is
+ * native Wix text or the `heading` attribute); items without a group come
+ * first, with no heading.
  *
  * An item with an empty value is drawn as a placeholder tile ("Coming soon"),
  * so the labels can go live before the numbers are known and the client only
@@ -220,7 +222,6 @@ cc-impact [hidden] { display: none !important; }
         if (!groups.has(item.group)) groups.set(item.group, []);
         groups.get(item.group).push(item);
       });
-      const heading = this.getAttribute("heading") ? "h3" : "h2";
       this._el.groups.innerHTML = [...groups]
         .filter(([, items]) => items.length)
         .map(([name, items]) => {
@@ -239,7 +240,7 @@ cc-impact [hidden] { display: none !important; }
             .join("");
           return `
           <section class="cci-group">
-            ${name ? `<${heading} class="cci-group-title">${esc(name)}</${heading}>` : ""}
+            ${name ? `<h3 class="cci-group-title">${esc(name)}</h3>` : ""}
             <div class="cci-grid" style="--cci-cols: ${columns(items.length)}">${tiles}</div>
           </section>`;
         })
