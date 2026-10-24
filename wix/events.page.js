@@ -1,9 +1,11 @@
-// Wix page code for the Events page. Change #customElement1 if the custom
-// element has a different ID in Studio.
+// Wix page code for the Events page, which holds two custom elements:
+//   #customElement1  <cc-events>  the program cards, from "Events" and "Sessions"
+//   #customElement2  <cc-impact>  the impact numbers, from "Impact"
+// Change the IDs if the elements have different ones in Studio.
 //
-// Reads the "Events" CMS collection and hands the items to <cc-events>.
-// Order sets the card order. Each program gets its rows from the "Sessions"
-// collection (matched on the Program reference) as `sessions`.
+// Order sets the card and tile order. Each program gets its rows from the
+// "Sessions" collection (matched on the Program reference) as `sessions`.
+// An Impact item with an empty Value shows "Coming soon".
 import wixData from "wix-data";
 
 // Date fields come back as "YYYY-MM-DD"; a Date object is turned into the
@@ -14,20 +16,22 @@ function dayKey(value) {
   return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
 }
 
+async function load(collection, sortField, limit) {
+  try {
+    const { items } = await wixData.query(collection).ascending(sortField).limit(limit).find();
+    return items;
+  } catch (err) {
+    console.error(`Could not load ${collection}`, err);
+    return [];
+  }
+}
+
 $w.onReady(async () => {
-  const events = $w("#customElement1");
-  let items = [];
-  let sessions = [];
-  try {
-    ({ items } = await wixData.query("Events").ascending("order").limit(100).find());
-  } catch (err) {
-    console.error("Could not load Events", err);
-  }
-  try {
-    ({ items: sessions } = await wixData.query("Sessions").ascending("date").limit(1000).find());
-  } catch (err) {
-    console.error("Could not load Sessions", err);
-  }
+  const [events, sessions, impact] = await Promise.all([
+    load("Events", "order", 100),
+    load("Sessions", "date", 1000),
+    load("Impact", "order", 100),
+  ]);
   const byProgram = {};
   sessions.forEach((s) => {
     const id = s.program && typeof s.program === "object" ? s.program._id : s.program;
@@ -39,6 +43,7 @@ $w.onReady(async () => {
       link: s.link,
     });
   });
-  items = items.map((e) => ({ ...e, sessions: byProgram[e._id] || [] }));
-  events.setAttribute("events", JSON.stringify(items));
+  const items = events.map((e) => ({ ...e, sessions: byProgram[e._id] || [] }));
+  $w("#customElement1").setAttribute("events", JSON.stringify(items));
+  $w("#customElement2").setAttribute("impact", JSON.stringify(impact));
 });

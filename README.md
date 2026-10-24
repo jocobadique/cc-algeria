@@ -131,6 +131,23 @@ Videos collection (one item per playlist; the client adds new ones here):
 
 Optional attributes: `eyebrow` and `heading`, `button-label` (default "Watch Playlist", as on the original page).
 
+### Impact numbers
+
+On the Events page, below the program cards, in its own section with a native heading. Same setup again: Server URL file `dist/cc-impact.js`, tag name `cc-impact`, attribute `impact`. The Events page code, `wix/events.page.js`, loads it for `#customElement2` (the program cards are `#customElement1`).
+
+Impact collection (one item per number):
+
+| Field | Key | Used for |
+| --- | --- | --- |
+| Label | `title` | Text under the number, for example "Teens" |
+| Value | `value` | The number, as text ("60", "~50", "75%"). **Leave it empty for a number that isn't known yet**: the tile then shows a "Coming soon" placeholder, and typing the number later fills it in |
+| Detail | `detail` | Small line under the label (program and dates); line breaks are kept |
+| Group | `group` | Items with the same group are shown together under that name, for example "NSLI-Y Workshops: Target Outcomes". Items without a group come first, with no heading |
+| Order | `order` | Tile order (and group order, by each group's first item) |
+| Published | `published` | Unchecked items are hidden |
+
+Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"). Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
+
 ### Events and Partners attributes
 
 Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"). On `cc-partners`: `link-label` (default "Visit website").
@@ -163,5 +180,5 @@ The band is sized in pixels from the layout, so it stays in place when a filter 
 
 - Edit the elements in `src/`.
 - `python build.py v1.1.0` writes every `src/cc-*.js` to `dist/` with a version banner. Commit `dist/`, tag the commit, push the tag, then update the tag in the Server URLs.
-- `preview.html`, `preview-events.html`, `preview-partners.html`, `preview-team.html` and `preview-videos.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`), `sample-partners.json`, `sample-team.json` and `sample-videos.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
+- `preview.html`, `preview-events.html`, `preview-partners.html`, `preview-team.html`, `preview-videos.html` and `preview-impact.html` stand in for the Wix pages: they load `sample-monuments.json`, `sample-events.json` (with `sample-sessions.json`), `sample-partners.json`, `sample-team.json`, `sample-videos.json` and `sample-impact.json` (exports of the CMS collections) the same way the page code does. Serve the folder (for example `npx serve .`) and open them, since they fetch the JSON.
 - `node shoot.cjs 375,768,1366` saves full-page and popup screenshots to `shots/` (needs `npm i playwright`).

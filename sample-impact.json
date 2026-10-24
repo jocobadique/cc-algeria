@@ -1,0 +1,61 @@
+[
+  {
+    "title": "Teens",
+    "value": "60",
+    "detail": "TEEN Mythology Guild\nNov 2025 – present · Once a month",
+    "order": 1
+  },
+  {
+    "title": "people including accompanying guardians/families",
+    "value": "100",
+    "detail": "YOUTH-Led Humanities (Stories that Shape us)\nJan 26 – Apr 6 2026",
+    "order": 2
+  },
+  {
+    "title": "Tweens",
+    "value": "30",
+    "detail": "TWEENS Mythology Guild\nJune 2026 – July 2026",
+    "order": 3
+  },
+  {
+    "title": "students ranging from kindergarten through 8th grade",
+    "value": "~50",
+    "detail": "Value-Added Program at Erie Children's Museum\nJune 17",
+    "order": 4
+  },
+  {
+    "title": "students participate across the 3 workshops",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 5
+  },
+  {
+    "title": "students complete post-workshop surveys",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 6
+  },
+  {
+    "title": "of surveyed participants report increased awareness of NSLI-Y",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 7
+  },
+  {
+    "title": "report increased interest in critical-language study or international exchange",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 8
+  },
+  {
+    "title": "students access or request NSLI-Y/Korean-language resources",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 9
+  },
+  {
+    "title": "views on the Classic Compass YouTube channel for NSLI-Y alumni videos",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 10
+  },
+  {
+    "title": "views on the Classic Compass website for NSLI-Y alumni blog posts",
+    "group": "NSLI-Y Workshops: Target Outcomes",
+    "order": 11
+  }
+]
