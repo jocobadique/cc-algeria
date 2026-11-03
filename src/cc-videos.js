@@ -31,13 +31,13 @@
   const CSS = `
 cc-videos {
   --ccv-card: #ffffff;
-  --ccv-fg: #0f2a2c;
-  --ccv-primary: #008381;
-  --ccv-deep: #003c40;
-  --ccv-secondary: #d9f5f2;
-  --ccv-accent: #8ce5d3;
-  --ccv-muted: #426566;
-  --ccv-border: #cce4e2;
+  --ccv-fg: #08201f;
+  --ccv-primary: #007a72;
+  --ccv-deep: #08201f;
+  --ccv-secondary: #d5f3f0;
+  --ccv-accent: #2ec4b6;
+  --ccv-muted: #1f3a3c;
+  --ccv-border: #cfe2e0;
   --ccv-display: "Fraunces", Georgia, "Times New Roman", serif;
   --ccv-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -55,21 +55,23 @@ cc-videos .ccv-title { margin: 0; font: 500 clamp(1.9rem, 3.4vw, 2.9rem)/1.12 va
 cc-videos .ccv-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 @media (max-width: 760px) { cc-videos .ccv-grid { grid-template-columns: 1fr; gap: 20px; } }
 
-cc-videos .ccv-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccv-card); border-radius: 28px; overflow: hidden; box-shadow: 0 20px 50px -20px rgba(0, 60, 64, 0.35); }
-cc-videos .ccv-media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: linear-gradient(135deg, var(--ccv-primary), var(--ccv-deep)); }
+cc-videos .ccv-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccv-card); border: 2px solid var(--ccv-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--ccv-accent); }
+cc-videos .ccv-media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--ccv-accent); border-bottom: 2px solid var(--ccv-deep); }
 cc-videos .ccv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
 cc-videos .ccv-card:hover .ccv-media img { transform: scale(1.04); }
-cc-videos .ccv-play { position: absolute; left: 14px; top: 14px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.92); color: var(--ccv-primary); }
+cc-videos .ccv-play { position: absolute; left: 14px; top: 14px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--ccv-deep); color: var(--ccv-accent); }
 cc-videos .ccv-body { display: flex; flex-direction: column; flex: 1; gap: 12px; padding: 28px; }
 cc-videos .ccv-name { margin: 0; font: 600 1.5rem/1.2 var(--ccv-display); color: var(--ccv-deep); white-space: pre-line; text-wrap: balance; }
 cc-videos .ccv-desc { margin: 0; font-size: 0.97rem; color: var(--ccv-muted); white-space: pre-line; }
-cc-videos .ccv-btn { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; background: var(--ccv-primary); color: #fff; font: 600 0.95rem/1.2 var(--ccv-body); text-decoration: none; transition: background .2s; }
-cc-videos .ccv-btn:hover { background: var(--ccv-deep); }
+cc-videos .ccv-btn { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 12px 26px; border: 2px solid var(--ccv-deep); border-radius: 999px; background: var(--ccv-deep); color: #fff; font: 600 0.95rem/1.2 var(--ccv-body); text-decoration: none; transition: background .2s, color .2s; }
+cc-videos .ccv-btn svg { color: var(--ccv-accent); transition: color .2s; }
+cc-videos .ccv-btn:hover { background: var(--ccv-accent); color: var(--ccv-deep); }
+cc-videos .ccv-btn:hover svg { color: var(--ccv-deep); }
 @media (max-width: 640px) { cc-videos .ccv-body { padding: 24px; } }
 
-cc-videos .ccv-skel { background: linear-gradient(90deg, var(--ccv-secondary), #eefaf8, var(--ccv-secondary)); background-size: 200% 100%; animation: ccv-shimmer 1.4s infinite; border-radius: 28px; min-height: 420px; }
+cc-videos .ccv-skel { background: linear-gradient(90deg, var(--ccv-secondary), #effbfa, var(--ccv-secondary)); background-size: 200% 100%; animation: ccv-shimmer 1.4s infinite; border-radius: 24px; min-height: 420px; }
 @keyframes ccv-shimmer { to { background-position: -200% 0; } }
-cc-videos :focus-visible { outline: 3px solid var(--ccv-accent); outline-offset: 2px; }
+cc-videos :focus-visible { outline: 3px solid var(--ccv-deep); outline-offset: 2px; }
 cc-videos [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   cc-videos *, cc-videos *::before, cc-videos *::after { transition: none !important; animation: none !important; }

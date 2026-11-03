@@ -33,13 +33,13 @@
   const CSS = `
 cc-team {
   --cct-card: #ffffff;
-  --cct-fg: #0f2a2c;
-  --cct-primary: #008381;
-  --cct-deep: #003c40;
-  --cct-secondary: #d9f5f2;
-  --cct-accent: #8ce5d3;
-  --cct-muted: #426566;
-  --cct-border: #cce4e2;
+  --cct-fg: #08201f;
+  --cct-primary: #007a72;
+  --cct-deep: #08201f;
+  --cct-secondary: #d5f3f0;
+  --cct-accent: #2ec4b6;
+  --cct-muted: #1f3a3c;
+  --cct-border: #cfe2e0;
   --cct-display: "Fraunces", Georgia, "Times New Roman", serif;
   --cct-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -58,8 +58,8 @@ cc-team .cct-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1f
 @media (max-width: 960px) { cc-team .cct-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { cc-team .cct-grid { grid-template-columns: 1fr; } }
 
-cc-team .cct-card { display: flex; flex-direction: column; gap: 22px; min-width: 0; padding: 28px; background: var(--cct-card); border: 1px solid var(--cct-border); border-radius: 28px; transition: transform .2s, box-shadow .2s; }
-cc-team .cct-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px -20px rgba(0, 60, 64, 0.35); }
+cc-team .cct-card { display: flex; flex-direction: column; gap: 22px; min-width: 0; padding: 28px; background: var(--cct-card); border: 2px solid var(--cct-deep); border-radius: 24px; box-shadow: 6px 6px 0 var(--cct-accent); transition: transform .2s, box-shadow .2s; }
+cc-team .cct-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--cct-accent); }
 cc-team .cct-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 /* The photos are cutouts on white or transparent backgrounds in many shapes
    (head and shoulders, full figure, a monogram), so each is shown whole,
@@ -67,7 +67,7 @@ cc-team .cct-text { display: flex; flex-direction: column; flex: 1; min-width: 0
 cc-team .cct-photo { flex: none; position: relative; height: 230px; border-bottom: 1px solid var(--cct-border); }
 cc-team .cct-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; }
 cc-team .cct-mono { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); width: 112px; height: 112px; border-radius: 50%; background: var(--cct-secondary); color: var(--cct-deep); display: grid; place-items: center; font: italic 500 2.8rem/1 var(--cct-display); }
-cc-team .cct-eyebrow { margin: 0; font: 600 0.78rem/1.4 var(--cct-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--cct-primary); }
+cc-team .cct-eyebrow { margin: 0; font: 700 0.8rem/1.4 var(--cct-body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--cct-primary); }
 cc-team .cct-name { margin: 6px 0 0; font: 600 1.85rem/1.12 var(--cct-display); color: var(--cct-deep); text-wrap: balance; }
 cc-team .cct-bio { margin: 12px 0 0; font-size: 0.95rem; color: var(--cct-muted); white-space: pre-line; }
 cc-team .cct-bio.is-clamped { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; }
@@ -76,14 +76,17 @@ cc-team .cct-toggle:hover, cc-team .cct-link:hover { color: var(--cct-deep); }
 cc-team .cct-link { margin-top: auto; padding-top: 14px; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font: 600 0.95rem var(--cct-body); color: var(--cct-primary); text-decoration: none; }
 
 /* Founder: a full-width card in the mint, photo beside the text. */
-cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-secondary); border-color: transparent; }
+cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-accent); box-shadow: 6px 6px 0 var(--cct-deep); }
+cc-team .cct-founder:hover { box-shadow: 9px 9px 0 var(--cct-deep); }
+cc-team .cct-founder .cct-eyebrow, cc-team .cct-founder .cct-toggle, cc-team .cct-founder .cct-link { color: var(--cct-deep); }
+cc-team .cct-founder .cct-toggle, cc-team .cct-founder .cct-link { text-decoration: underline; text-underline-offset: 3px; }
 cc-team .cct-founder .cct-photo { width: 300px; height: 300px; border: 0; }
 cc-team .cct-founder .cct-photo img { object-position: center; transition: opacity .25s; }
 cc-team .cct-photo img[data-trim]:not(.is-ready) { opacity: 0; }
 cc-team .cct-founder .cct-mono { top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 70%; height: 70%; background: #fff; font-size: 4rem; }
 @media (max-width: 960px) { cc-team .cct-founder .cct-photo { width: 240px; height: 240px; } }
 cc-team .cct-founder .cct-name { font-size: clamp(2.2rem, 4vw, 2.8rem); }
-cc-team .cct-founder .cct-bio { font-size: 1.02rem; color: var(--cct-fg); opacity: .82; max-width: 62ch; }
+cc-team .cct-founder .cct-bio { font-size: 1.02rem; color: var(--cct-fg); max-width: 62ch; }
 @media (max-width: 640px) {
   cc-team .cct-card { padding: 24px; }
   cc-team .cct-founder { flex-direction: column; align-items: flex-start; gap: 18px; padding: 28px 24px; }
@@ -91,10 +94,10 @@ cc-team .cct-founder .cct-bio { font-size: 1.02rem; color: var(--cct-fg); opacit
   cc-team .cct-founder .cct-photo { align-self: center; width: 220px; height: 220px; }
 }
 
-cc-team .cct-skel { background: linear-gradient(90deg, var(--cct-secondary), #eefaf8, var(--cct-secondary)); background-size: 200% 100%; animation: cct-shimmer 1.4s infinite; border-radius: 28px; min-height: 280px; }
+cc-team .cct-skel { background: linear-gradient(90deg, var(--cct-secondary), #effbfa, var(--cct-secondary)); background-size: 200% 100%; animation: cct-shimmer 1.4s infinite; border-radius: 24px; min-height: 280px; }
 cc-team .cct-skel.cct-founder { min-height: 220px; }
 @keyframes cct-shimmer { to { background-position: -200% 0; } }
-cc-team :focus-visible { outline: 3px solid var(--cct-accent); outline-offset: 2px; }
+cc-team :focus-visible { outline: 3px solid var(--cct-deep); outline-offset: 2px; }
 cc-team [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   cc-team *, cc-team *::before, cc-team *::after { transition: none !important; animation: none !important; }

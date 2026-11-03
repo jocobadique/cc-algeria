@@ -113,7 +113,7 @@ Team collection:
 | Eyebrow | `eyebrow` | Small label above the name |
 | Bio | `bio` | Card text. Long bios are cut to 6 lines with a "Read more" toggle; the full text is always in the page |
 | Photo | `photo` | Shown whole (fitted, not cropped), standing on the bottom edge of the photo area, since the photos are cutouts in many shapes; without one the card shows the name's initial |
-| Founder | `isFounder` | Puts the member in the wide mint card on top |
+| Founder | `isFounder` | Puts the member in the wide turquoise card on top |
 | Link URL / Link Label | `linkUrl`, `linkLabel` | A link under the bio (new tab), when Link URL is set |
 | Order | `order` | Card order |
 
@@ -158,7 +158,7 @@ Impact collection (one item per number):
 | Order | `order` | Tile order (and group order, by each group's first item) |
 | Published | `published` | Unchecked items are hidden |
 
-Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). `band` and `band-depth` work as on the Events and Partners elements (see [Cards overlapping the header](#cards-overlapping-the-header)); on the Impact page the band reaches into the first row of number tiles. The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#f3fcfa`, a light mint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
+Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). `band` and `band-depth` work as on the Events and Partners elements (see [Cards overlapping the header](#cards-overlapping-the-header)); on the Impact page the band reaches into the first row of number tiles. The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#effbfa`, a light turquoise tint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 
 ### Events and Partners attributes
 
@@ -168,7 +168,7 @@ Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-labe
 
 `cc-events`, `cc-partners` and `cc-impact` can paint a full-width band behind their top so the cards overlap the native header above, like the band on the Events and Partners pages:
 
-- `band`: the band color, for example `#d9f5f2` (the header section's mint).
+- `band`: the band color, for example `#2ec4b6` (the header section's turquoise).
 - `band-depth`: how far the band reaches into the first row of cards, in pixels (default `140`).
 
 The band is sized in pixels from the layout, so it stays in place when a filter leaves fewer cards, at every breakpoint and with any number of items. In Studio:

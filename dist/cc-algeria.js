@@ -1,4 +1,4 @@
-/*! cc-algeria v1.7.1 */
+/*! cc-algeria v1.8.0 */
 /*
  * <cc-algeria> — Classic Compass "Algeria Initiative" monument explorer.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -28,15 +28,15 @@
 
   const CSS = `
 cc-algeria {
-  --cca-bg: #f7fdfd;
+  --cca-bg: #ffffff;
   --cca-card: #ffffff;
-  --cca-fg: #002529;
-  --cca-primary: #008381;
-  --cca-deep: #003c40;
-  --cca-secondary: #d9f5f2;
-  --cca-accent: #8ce5d3;
-  --cca-muted: #426566;
-  --cca-border: #cce4e2;
+  --cca-fg: #08201f;
+  --cca-primary: #007a72;
+  --cca-deep: #08201f;
+  --cca-secondary: #d5f3f0;
+  --cca-accent: #2ec4b6;
+  --cca-muted: #1f3a3c;
+  --cca-border: #cfe2e0;
   --cca-display: "Fraunces", Georgia, "Times New Roman", serif;
   --cca-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -56,8 +56,8 @@ cc-algeria .cca-bar { display: flex; flex-wrap: wrap; justify-content: space-bet
 cc-algeria .cca-filters { display: flex; flex-wrap: wrap; gap: 6px; }
 cc-algeria .cca-chip { appearance: none; border: 1px solid transparent; background: transparent; color: var(--cca-fg); font: 600 0.9rem/1 var(--cca-body); padding: 10px 16px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; }
 cc-algeria .cca-chip:hover { background: var(--cca-secondary); }
-cc-algeria .cca-chip[aria-pressed="true"] { background: var(--cca-primary); color: #fff; }
-cc-algeria .cca-search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--cca-border); background: var(--cca-card); border-radius: 999px; padding: 8px 16px; color: var(--cca-muted); min-width: 0; }
+cc-algeria .cca-chip[aria-pressed="true"] { background: var(--cca-deep); color: #fff; }
+cc-algeria .cca-search { display: flex; align-items: center; gap: 8px; border: 2px solid var(--cca-deep); background: var(--cca-card); border-radius: 999px; padding: 8px 16px; color: var(--cca-muted); min-width: 0; }
 cc-algeria .cca-search input { appearance: none; border: 0; outline: 0; background: transparent; font: 400 0.95rem var(--cca-body); color: var(--cca-fg); width: 180px; max-width: 100%; padding: 2px 0; }
 cc-algeria .cca-search:focus-within { border-color: var(--cca-primary); }
 
@@ -65,12 +65,12 @@ cc-algeria .cca-grid { display: grid; grid-template-columns: repeat(3, minmax(0,
 @media (max-width: 1000px) { cc-algeria .cca-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { cc-algeria .cca-grid { grid-template-columns: 1fr; gap: 28px; } cc-algeria .cca-search { width: 100%; } cc-algeria .cca-search input { width: 100%; } }
 
-cc-algeria .cca-card { display: flex; flex-direction: column; min-width: 0; background: var(--cca-card); border: 1px solid var(--cca-border); border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
-cc-algeria .cca-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(0, 60, 64, 0.45); }
-cc-algeria .cca-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--cca-secondary); }
+cc-algeria .cca-card { display: flex; flex-direction: column; min-width: 0; background: var(--cca-card); border: 2px solid var(--cca-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--cca-accent); transition: transform .2s, box-shadow .2s; }
+cc-algeria .cca-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--cca-accent); }
+cc-algeria .cca-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--cca-secondary); border-bottom: 2px solid var(--cca-deep); }
 cc-algeria .cca-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
 cc-algeria .cca-card:hover .cca-media img { transform: scale(1.04); }
-cc-algeria .cca-badge { position: absolute; left: 14px; top: 14px; background: rgba(255, 255, 255, 0.95); color: var(--cca-deep); font: 700 0.68rem/1 var(--cca-body); letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; }
+cc-algeria .cca-badge { position: absolute; left: 14px; top: 14px; background: var(--cca-accent); color: var(--cca-deep); border: 1.5px solid var(--cca-deep); font: 700 0.68rem/1 var(--cca-body); letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; }
 cc-algeria .cca-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
 cc-algeria .cca-loc { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.8rem; color: var(--cca-muted); }
 cc-algeria .cca-loc svg { flex: none; }
@@ -79,21 +79,21 @@ cc-algeria .cca-desc { margin: 12px 0 20px; font-size: 0.93rem; color: var(--cca
 cc-algeria .cca-more { appearance: none; margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; border-top: 1px solid var(--cca-border); background: none; padding: 14px 0 0; font: 600 0.95rem var(--cca-body); color: var(--cca-primary); cursor: pointer; text-align: left; }
 cc-algeria .cca-more:hover { color: var(--cca-deep); }
 
-cc-algeria .cca-skel { background: linear-gradient(90deg, var(--cca-secondary), #eefaf8, var(--cca-secondary)); background-size: 200% 100%; animation: cca-shimmer 1.4s infinite; border-radius: 10px; aspect-ratio: 4 / 4.6; }
+cc-algeria .cca-skel { background: linear-gradient(90deg, var(--cca-secondary), #effbfa, var(--cca-secondary)); background-size: 200% 100%; animation: cca-shimmer 1.4s infinite; border-radius: 24px; aspect-ratio: 4 / 4.6; }
 @keyframes cca-shimmer { to { background-position: -200% 0; } }
 cc-algeria .cca-empty { text-align: center; padding: 48px 0; color: var(--cca-muted); }
 cc-algeria .cca-empty button { margin-top: 12px; }
 
-cc-algeria .cca-btn { appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--cca-primary); border-radius: 999px; padding: 11px 20px; font: 600 0.95rem/1 var(--cca-body); cursor: pointer; text-decoration: none; transition: background .2s, color .2s; }
-cc-algeria .cca-btn-solid { background: var(--cca-primary); color: #fff; }
-cc-algeria .cca-btn-solid:hover { background: var(--cca-deep); border-color: var(--cca-deep); }
+cc-algeria .cca-btn { appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 2px solid var(--cca-deep); border-radius: 999px; padding: 12px 22px; font: 600 0.95rem/1 var(--cca-body); cursor: pointer; text-decoration: none; transition: background .2s, color .2s; }
+cc-algeria .cca-btn-solid { background: var(--cca-deep); color: #fff; }
+cc-algeria .cca-btn-solid:hover { background: var(--cca-accent); color: var(--cca-deep); }
 cc-algeria .cca-btn-line { background: transparent; color: var(--cca-deep); }
 cc-algeria .cca-btn-line:hover { background: var(--cca-secondary); }
 
-cc-algeria .cca-overlay { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; background: rgba(0, 37, 41, 0.6); }
+cc-algeria .cca-overlay { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; background: rgba(8, 32, 31, 0.6); }
 cc-algeria .cca-overlay[hidden] { display: none; }
-cc-algeria .cca-dialog { position: relative; width: 100%; max-width: 880px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; background: var(--cca-card); border-radius: 12px; outline: none; }
-cc-algeria .cca-x { position: absolute; right: 14px; top: 14px; z-index: 2; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--cca-border); border-radius: 50%; background: var(--cca-card); color: var(--cca-fg); cursor: pointer; }
+cc-algeria .cca-dialog { position: relative; width: 100%; max-width: 880px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; background: var(--cca-card); border: 2px solid var(--cca-deep); border-radius: 24px; outline: none; }
+cc-algeria .cca-x { position: absolute; right: 14px; top: 14px; z-index: 2; width: 38px; height: 38px; display: grid; place-items: center; border: 2px solid var(--cca-deep); border-radius: 50%; background: var(--cca-card); color: var(--cca-fg); cursor: pointer; }
 cc-algeria .cca-d-top { padding: 32px 32px 0; }
 cc-algeria .cca-d-loc { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; padding-right: 40px; font-size: 0.85rem; color: var(--cca-primary); }
 cc-algeria .cca-d-loc a { color: inherit; font-weight: 600; }
@@ -112,13 +112,13 @@ cc-algeria .cca-thumbs button { width: 80px; height: 56px; padding: 0; border: 1
 cc-algeria .cca-thumbs button[aria-pressed="true"] { opacity: 1; outline: 2px solid var(--cca-primary); outline-offset: 2px; }
 cc-algeria .cca-thumbs img { display: block; width: 100%; height: 100%; object-fit: cover; }
 cc-algeria .cca-dialog { padding-bottom: 28px; }
-cc-algeria .cca-d-foot { display: flex; justify-content: flex-end; margin: 26px 0 -28px; padding: 18px 32px; border-top: 1px solid var(--cca-border); background: #effaf8; }
+cc-algeria .cca-d-foot { display: flex; justify-content: flex-end; margin: 26px 0 -28px; padding: 18px 32px; border-top: 1px solid var(--cca-border); background: var(--cca-secondary); }
 @media (max-width: 620px) {
   cc-algeria .cca-d-top, cc-algeria .cca-d-gal { padding-left: 20px; padding-right: 20px; }
   cc-algeria .cca-d-top { padding-top: 24px; }
   cc-algeria .cca-d-foot { padding-left: 20px; padding-right: 20px; }
 }
-cc-algeria :focus-visible { outline: 3px solid var(--cca-accent); outline-offset: 2px; }
+cc-algeria :focus-visible { outline: 3px solid var(--cca-deep); outline-offset: 2px; }
 cc-algeria [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   cc-algeria *, cc-algeria *::before, cc-algeria *::after { transition: none !important; animation: none !important; }

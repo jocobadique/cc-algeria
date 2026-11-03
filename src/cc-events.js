@@ -24,7 +24,7 @@
  *   upcoming-label, past-label — headings of the popup's session lists
  *                (default "Upcoming sessions", "Past sessions")
  *   link-label — text for a session's event page link (default "Event page")
- *   band       — a color (like #d9f5f2) for a full-width band behind the filters
+ *   band       — a color (like #2ec4b6) for a full-width band behind the filters
  *                and the top of the cards, so they overlap the header above.
  *                It runs up to the top of the Wix section, so the element
  *                should be the first thing in its section.
@@ -41,15 +41,15 @@
 
   const CSS = `
 cc-events {
-  --cce-bg: #f7fdfd;
+  --cce-bg: #ffffff;
   --cce-card: #ffffff;
-  --cce-fg: #0f2a2c;
-  --cce-primary: #008381;
-  --cce-deep: #003c40;
-  --cce-secondary: #d9f5f2;
-  --cce-accent: #8ce5d3;
-  --cce-muted: #426566;
-  --cce-border: #cce4e2;
+  --cce-fg: #08201f;
+  --cce-primary: #007a72;
+  --cce-deep: #08201f;
+  --cce-secondary: #d5f3f0;
+  --cce-accent: #2ec4b6;
+  --cce-muted: #1f3a3c;
+  --cce-border: #cfe2e0;
   --cce-display: "Fraunces", Georgia, "Times New Roman", serif;
   --cce-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -78,13 +78,13 @@ cc-events .cce-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 
 @media (max-width: 1000px) { cc-events .cce-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { cc-events .cce-grid { grid-template-columns: 1fr; gap: 28px; } }
 
-cc-events .cce-card { display: flex; flex-direction: column; min-width: 0; background: var(--cce-card); border: 1px solid var(--cce-border); border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
-cc-events .cce-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(0, 60, 64, 0.45); }
-cc-events .cce-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--cce-secondary); }
+cc-events .cce-card { display: flex; flex-direction: column; min-width: 0; background: var(--cce-card); border: 2px solid var(--cce-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--cce-accent); transition: transform .2s, box-shadow .2s; }
+cc-events .cce-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--cce-accent); }
+cc-events .cce-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--cce-secondary); border-bottom: 2px solid var(--cce-deep); }
 cc-events .cce-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
 cc-events .cce-card:hover .cce-media img { transform: scale(1.04); }
-cc-events .cce-ph { display: grid; place-items: center; width: 100%; height: 100%; background: linear-gradient(135deg, var(--cce-deep), var(--cce-primary)); color: var(--cce-accent); font: italic 500 4.5rem/1 var(--cce-display); }
-cc-events .cce-badge { position: absolute; left: 14px; top: 14px; background: rgba(255, 255, 255, 0.95); color: var(--cce-deep); font: 700 0.68rem/1 var(--cce-body); letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; }
+cc-events .cce-ph { display: grid; place-items: center; width: 100%; height: 100%; background: var(--cce-accent); color: var(--cce-deep); font: italic 500 4.5rem/1 var(--cce-display); }
+cc-events .cce-badge { position: absolute; left: 14px; top: 14px; background: var(--cce-accent); color: var(--cce-deep); border: 1.5px solid var(--cce-deep); font: 700 0.68rem/1 var(--cce-body); letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; }
 cc-events .cce-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
 cc-events .cce-loc { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.8rem; color: var(--cce-muted); }
 cc-events .cce-loc svg { flex: none; }
@@ -95,13 +95,13 @@ cc-events .cce-next svg { flex: none; color: var(--cce-primary); }
 cc-events .cce-more { appearance: none; margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; border-top: 1px solid var(--cce-border); background: none; padding: 14px 0 0; font: 600 0.95rem var(--cce-body); color: var(--cce-primary); cursor: pointer; text-align: left; }
 cc-events .cce-more:hover { color: var(--cce-deep); }
 
-cc-events .cce-skel { background: linear-gradient(90deg, var(--cce-secondary), #eefaf8, var(--cce-secondary)); background-size: 200% 100%; animation: cce-shimmer 1.4s infinite; border-radius: 10px; aspect-ratio: 4 / 4.6; }
+cc-events .cce-skel { background: linear-gradient(90deg, var(--cce-secondary), #effbfa, var(--cce-secondary)); background-size: 200% 100%; animation: cce-shimmer 1.4s infinite; border-radius: 24px; aspect-ratio: 4 / 4.6; }
 @keyframes cce-shimmer { to { background-position: -200% 0; } }
 
-cc-events .cce-overlay { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; background: rgba(0, 37, 41, 0.6); }
+cc-events .cce-overlay { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; background: rgba(8, 32, 31, 0.6); }
 cc-events .cce-overlay[hidden] { display: none; }
-cc-events .cce-dialog { position: relative; width: 100%; max-width: 880px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; background: var(--cce-card); border-radius: 12px; outline: none; padding-bottom: 28px; }
-cc-events .cce-x { position: absolute; right: 14px; top: 14px; z-index: 2; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--cce-border); border-radius: 50%; background: var(--cce-card); color: var(--cce-fg); cursor: pointer; }
+cc-events .cce-dialog { position: relative; width: 100%; max-width: 880px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; background: var(--cce-card); border: 2px solid var(--cce-deep); border-radius: 24px; outline: none; padding-bottom: 28px; }
+cc-events .cce-x { position: absolute; right: 14px; top: 14px; z-index: 2; width: 38px; height: 38px; display: grid; place-items: center; border: 2px solid var(--cce-deep); border-radius: 50%; background: var(--cce-card); color: var(--cce-fg); cursor: pointer; }
 cc-events .cce-d-top { padding: 32px 32px 0; }
 cc-events .cce-d-loc { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; padding-right: 40px; font-size: 0.85rem; color: var(--cce-primary); }
 cc-events .cce-tag { display: inline-block; background: var(--cce-secondary); color: var(--cce-deep); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
@@ -133,7 +133,7 @@ cc-events .cce-ses-title { margin: 2px 0 0; font: 500 1.15rem/1.3 var(--cce-disp
 cc-events .cce-ses-desc { margin: 8px 0 0; font-size: 0.92rem; color: var(--cce-fg); opacity: 0.85; white-space: pre-line; }
 cc-events .cce-ses-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.88rem; font-weight: 600; color: var(--cce-primary); text-decoration: none; }
 cc-events .cce-ses-link:hover { color: var(--cce-deep); text-decoration: underline; }
-cc-events .cce-ses-all { appearance: none; margin: 4px 0 0; padding: 10px 18px; border: 1px solid var(--cce-border); border-radius: 999px; background: none; font: 600 0.88rem var(--cce-body); color: var(--cce-deep); cursor: pointer; }
+cc-events .cce-ses-all { appearance: none; margin: 4px 0 0; padding: 10px 18px; border: 2px solid var(--cce-deep); border-radius: 999px; background: none; font: 600 0.88rem var(--cce-body); color: var(--cce-deep); cursor: pointer; }
 cc-events .cce-ses-all:hover { background: var(--cce-secondary); }
 cc-events .cce-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 620px) {
@@ -142,7 +142,7 @@ cc-events .cce-sr { position: absolute; width: 1px; height: 1px; overflow: hidde
   cc-events .cce-cal { height: 58px; }
   cc-events .cce-d-top { padding-top: 24px; }
 }
-cc-events :focus-visible { outline: 3px solid var(--cce-accent); outline-offset: 2px; }
+cc-events :focus-visible { outline: 3px solid var(--cce-deep); outline-offset: 2px; }
 cc-events [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   cc-events *, cc-events *::before, cc-events *::after { transition: none !important; animation: none !important; }

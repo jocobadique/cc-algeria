@@ -16,7 +16,7 @@
  *   heading    — a heading above the grid (leave empty when the Wix page has its own)
  *   eyebrow    — small label above the heading
  *   link-label — text for the website link (default "Visit website")
- *   band       — a color (like #d9f5f2) for a full-width band behind the top
+ *   band       — a color (like #2ec4b6) for a full-width band behind the top
  *                of the cards, so they overlap the header above. It runs up
  *                to the top of the Wix section, so the element should be the
  *                first thing in its section.
@@ -33,13 +33,13 @@
   const CSS = `
 cc-partners {
   --ccp-card: #ffffff;
-  --ccp-fg: #0f2a2c;
-  --ccp-primary: #008381;
-  --ccp-deep: #003c40;
-  --ccp-secondary: #d9f5f2;
-  --ccp-accent: #8ce5d3;
-  --ccp-muted: #426566;
-  --ccp-border: #cce4e2;
+  --ccp-fg: #08201f;
+  --ccp-primary: #007a72;
+  --ccp-deep: #08201f;
+  --ccp-secondary: #d5f3f0;
+  --ccp-accent: #2ec4b6;
+  --ccp-muted: #1f3a3c;
+  --ccp-border: #cfe2e0;
   --ccp-display: "Fraunces", Georgia, "Times New Roman", serif;
   --ccp-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -61,9 +61,9 @@ cc-partners .ccp-grid { display: grid; grid-template-columns: repeat(3, minmax(0
 @media (max-width: 1000px) { cc-partners .ccp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { cc-partners .ccp-grid { grid-template-columns: 1fr; } }
 
-cc-partners .ccp-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccp-card); border: 1px solid var(--ccp-border); border-radius: 10px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
-cc-partners .ccp-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(0, 60, 64, 0.45); }
-cc-partners .ccp-logo { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 28px 36px; background: #fff; border-bottom: 1px solid var(--ccp-border); }
+cc-partners .ccp-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccp-card); border: 2px solid var(--ccp-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--ccp-accent); transition: transform .2s, box-shadow .2s; }
+cc-partners .ccp-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ccp-accent); }
+cc-partners .ccp-logo { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 28px 36px; background: #fff; border-bottom: 2px solid var(--ccp-deep); }
 /* Positioned inside the padding so a square or tall logo can't stretch the 16:9 box. */
 cc-partners .ccp-logo img { position: absolute; left: 36px; top: 28px; display: block; width: calc(100% - 72px); height: calc(100% - 56px); object-fit: contain; }
 cc-partners .ccp-mono { width: 96px; height: 96px; display: grid; place-items: center; border-radius: 50%; background: var(--ccp-secondary); color: var(--ccp-deep); font: italic 500 2.4rem/1 var(--ccp-display); }
@@ -73,9 +73,9 @@ cc-partners .ccp-desc { margin: 12px 0 20px; font-size: 0.93rem; color: var(--cc
 cc-partners .ccp-link { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--ccp-border); padding: 14px 0 0; font: 600 0.95rem var(--ccp-body); color: var(--ccp-primary); text-decoration: none; }
 cc-partners .ccp-link:hover { color: var(--ccp-deep); }
 
-cc-partners .ccp-skel { background: linear-gradient(90deg, var(--ccp-secondary), #eefaf8, var(--ccp-secondary)); background-size: 200% 100%; animation: ccp-shimmer 1.4s infinite; border-radius: 10px; aspect-ratio: 4 / 4; }
+cc-partners .ccp-skel { background: linear-gradient(90deg, var(--ccp-secondary), #effbfa, var(--ccp-secondary)); background-size: 200% 100%; animation: ccp-shimmer 1.4s infinite; border-radius: 24px; aspect-ratio: 4 / 4; }
 @keyframes ccp-shimmer { to { background-position: -200% 0; } }
-cc-partners :focus-visible { outline: 3px solid var(--ccp-accent); outline-offset: 2px; }
+cc-partners :focus-visible { outline: 3px solid var(--ccp-deep); outline-offset: 2px; }
 cc-partners [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   cc-partners *, cc-partners *::before, cc-partners *::after { transition: none !important; animation: none !important; }

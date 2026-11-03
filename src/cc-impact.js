@@ -37,7 +37,7 @@
  *   heading-level    — level of the group and programs headings, 2 or 3 (default 3,
  *                      for a section under a native H2; use 2 on a page whose H1 is the
  *                      only heading above). Program names are one level below.
- *   band             — a color (like #d9f5f2) for a full-width band behind the top
+ *   band             — a color (like #2ec4b6) for a full-width band behind the top
  *                      of the first row, so it overlaps the header above, as on the
  *                      Events and Partners pages. It runs up to the top of the Wix
  *                      section, so the element should be the first thing in its section.
@@ -55,13 +55,13 @@
 cc-impact {
   --cci-card: #ffffff;
   --cci-pending-bg: #ffffff;
-  --cci-fg: #0f2a2c;
-  --cci-primary: #008381;
-  --cci-deep: #003c40;
-  --cci-secondary: #d9f5f2;
-  --cci-accent: #8ce5d3;
-  --cci-muted: #426566;
-  --cci-border: #cce4e2;
+  --cci-fg: #08201f;
+  --cci-primary: #007a72;
+  --cci-deep: #08201f;
+  --cci-secondary: #d5f3f0;
+  --cci-accent: #2ec4b6;
+  --cci-muted: #1f3a3c;
+  --cci-border: #cfe2e0;
   --cci-display: "Fraunces", Georgia, "Times New Roman", serif;
   --cci-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -84,7 +84,7 @@ cc-impact .cci-group-title { max-width: none; margin: 0 0 24px; text-align: cent
 
 /* Flex rather than grid so a short last row sits in the middle. */
 cc-impact .cci-grid { --cci-cols: 4; --cci-gap: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--cci-gap); }
-cc-impact .cci-tile { flex: 0 1 calc((100% - (var(--cci-cols) - 1) * var(--cci-gap)) / var(--cci-cols)); min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 30px 26px 28px; background: var(--cci-card); border-radius: 24px; border-top: 4px solid var(--cci-primary); box-shadow: 0 20px 50px -24px rgba(0, 60, 64, 0.35); }
+cc-impact .cci-tile { flex: 0 1 calc((100% - (var(--cci-cols) - 1) * var(--cci-gap)) / var(--cci-cols)); min-width: 0; display: flex; flex-direction: column; gap: 6px; padding: 30px 26px 28px; background: var(--cci-card); border-radius: 24px; border: 2px solid var(--cci-deep); box-shadow: 6px 6px 0 var(--cci-accent); }
 @media (max-width: 1000px) { cc-impact .cci-grid { --cci-cols: 2 !important; } }
 @media (max-width: 560px) {
   cc-impact .cci-grid { --cci-cols: 1 !important; --cci-gap: 14px; }
@@ -100,17 +100,17 @@ cc-impact .cci-label { margin: 0; font: 500 1rem/1.45 var(--cci-body); color: va
 cc-impact .cci-detail { margin: 4px 0 0; padding-top: 12px; border-top: 1px solid var(--cci-border); font-size: 0.85rem; line-height: 1.5; color: var(--cci-muted); white-space: pre-line; }
 
 /* A tile whose number isn't known yet. */
-cc-impact .cci-tile.is-pending { background: var(--cci-pending-bg); border-top-color: var(--cci-accent); box-shadow: none; outline: 1.5px dashed var(--cci-border); outline-offset: -1.5px; }
+cc-impact .cci-tile.is-pending { background: var(--cci-pending-bg); border-style: dashed; box-shadow: none; }
 cc-impact .cci-pending { align-self: flex-start; margin: 6px 0 10px; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--cci-secondary); color: var(--cci-deep); font: 600 0.78rem/1.2 var(--cci-body); letter-spacing: 0.08em; text-transform: uppercase; }
 cc-impact .cci-pending::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cci-primary); animation: cci-pulse 1.8s ease-in-out infinite; }
 @keyframes cci-pulse { 50% { opacity: 0.3; } }
 
 /* Program overviews: a wide card per program, photo on the left. */
 cc-impact .cci-progs { display: grid; gap: 28px; }
-cc-impact .cci-prog { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); min-width: 0; background: var(--cci-card); border-radius: 28px; overflow: hidden; box-shadow: 0 20px 50px -24px rgba(0, 60, 64, 0.35); }
-cc-impact .cci-prog-media { position: relative; min-height: 280px; background: linear-gradient(135deg, var(--cci-primary), var(--cci-deep)); }
+cc-impact .cci-prog { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); min-width: 0; background: var(--cci-card); border: 2px solid var(--cci-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--cci-accent); }
+cc-impact .cci-prog-media { position: relative; min-height: 280px; background: var(--cci-accent); border-right: 2px solid var(--cci-deep); }
 cc-impact .cci-prog-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-cc-impact .cci-prog-mono { position: absolute; inset: 0; display: grid; place-items: center; font: italic 600 4.5rem/1 var(--cci-display); color: var(--cci-accent); }
+cc-impact .cci-prog-mono { position: absolute; inset: 0; display: grid; place-items: center; font: italic 600 4.5rem/1 var(--cci-display); color: var(--cci-deep); }
 cc-impact .cci-prog-body { display: flex; flex-direction: column; gap: 14px; padding: 34px 38px 36px; min-width: 0; }
 cc-impact .cci-prog-venue { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--cci-muted); }
 cc-impact .cci-prog-name { max-width: none; margin: 0; font: 600 clamp(1.4rem, 2.2vw, 1.75rem)/1.2 var(--cci-display); color: var(--cci-deep); text-wrap: balance; }
@@ -124,15 +124,15 @@ cc-impact .cci-points li + li { margin-top: 8px; }
 cc-impact .cci-points li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 7px; height: 7px; border-radius: 50%; background: var(--cci-accent); }
 @media (max-width: 860px) {
   cc-impact .cci-prog { grid-template-columns: 1fr; }
-  cc-impact .cci-prog-media { min-height: 0; aspect-ratio: 16 / 9; }
+  cc-impact .cci-prog-media { min-height: 0; aspect-ratio: 16 / 9; border-right: 0; border-bottom: 2px solid var(--cci-deep); }
 }
 @media (max-width: 560px) {
   cc-impact .cci-progs { gap: 20px; }
-  cc-impact .cci-prog { border-radius: 22px; }
+  cc-impact .cci-prog { border-radius: 20px; }
   cc-impact .cci-prog-body { padding: 24px 22px 26px; gap: 12px; }
 }
 
-cc-impact .cci-skel { flex: 0 1 calc((100% - (var(--cci-cols) - 1) * var(--cci-gap)) / var(--cci-cols)); min-height: 180px; border-radius: 24px; background: linear-gradient(90deg, var(--cci-secondary), #eefaf8, var(--cci-secondary)); background-size: 200% 100%; animation: cci-shimmer 1.4s infinite; }
+cc-impact .cci-skel { flex: 0 1 calc((100% - (var(--cci-cols) - 1) * var(--cci-gap)) / var(--cci-cols)); min-height: 180px; border-radius: 24px; background: linear-gradient(90deg, var(--cci-secondary), #effbfa, var(--cci-secondary)); background-size: 200% 100%; animation: cci-shimmer 1.4s infinite; }
 @keyframes cci-shimmer { to { background-position: -200% 0; } }
 cc-impact [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
