@@ -11,7 +11,14 @@
  * Each event can carry a `sessions` array (the page code attaches the
  * program's rows from the "Sessions" collection): { title, date (YYYY-MM-DD),
  * time, description, link }. The popup lists upcoming sessions first, then
- * past ones, newest first.
+ * past ones, newest first. A session with an `endDate` (and optionally a
+ * `frequency`, such as "Weekly") stands for a run of meetings and is shown
+ * once, as a date range; it stays upcoming until its end date.
+ *
+ * An event's optional `note` (a funding statement, for example) is shown in
+ * full in the popup. When the event has no cover photo, the card shows the
+ * note's first sentence in place of the image, with a button that lays the
+ * whole note over the card.
  *
  * It renders into the light DOM (not a shadow root) so the program names
  * and descriptions are part of the page for search engines. All styles are
@@ -24,6 +31,8 @@
  *   upcoming-label, past-label — headings of the popup's session lists
  *                (default "Upcoming sessions", "Past sessions")
  *   link-label — text for a session's event page link (default "Event page")
+ *   note-more-label, note-less-label — the card's note buttons
+ *                (default "Read more", "Show less")
  *   band       — a color (like #2ec4b6) for a full-width band behind the filters
  *                and the top of the cards, so they overlap the header above.
  *                It runs up to the top of the Wix section, so the element
@@ -92,6 +101,21 @@ cc-events .cce-name { margin: 8px 0 0; font: 500 1.5rem/1.2 var(--cce-display); 
 cc-events .cce-desc { margin: 12px 0 20px; font-size: 0.93rem; color: var(--cce-muted); white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 cc-events .cce-next { display: flex; align-items: center; gap: 8px; margin: -6px 0 18px; font-size: 0.85rem; font-weight: 600; color: var(--cce-deep); }
 cc-events .cce-next svg { flex: none; color: var(--cce-primary); }
+/* A program without a cover photo but with a note (a funding statement):
+   the note's first sentence fills the image area, and "Read more" lays the
+   whole note over the card, so the card keeps its size in the row. */
+cc-events .cce-card { position: relative; }
+cc-events .cce-note { display: flex; flex-direction: column; justify-content: center; gap: 12px; width: 100%; height: 100%; padding: 22px 24px; background: var(--cce-accent); color: var(--cce-deep); }
+cc-events .cce-note.has-badge { padding-top: 48px; }
+cc-events .cce-note-lead { margin: 0; font: italic 500 1.06rem/1.45 var(--cce-display); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+cc-events .cce-note-btn { appearance: none; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 2px solid var(--cce-deep); border-radius: 999px; background: var(--cce-card); color: var(--cce-deep); font: 600 0.85rem/1 var(--cce-body); cursor: pointer; }
+cc-events .cce-note-btn:hover { background: var(--cce-deep); color: #fff; }
+cc-events .cce-note-full { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; gap: 16px; padding: 26px 24px 22px; overflow-y: auto; background: var(--cce-accent); color: var(--cce-deep); }
+cc-events .cce-note-full p { margin: 0; font-size: 0.95rem; line-height: 1.6; white-space: pre-line; }
+cc-events .cce-note-full .cce-note-btn { margin-top: auto; }
+cc-events .cce-d-note { margin: 18px 0 0; padding: 14px 18px; border-left: 4px solid var(--cce-accent); background: var(--cce-secondary); border-radius: 0 8px 8px 0; font-size: 0.88rem; line-height: 1.6; color: var(--cce-muted); white-space: pre-line; }
+cc-events .cce-cal-to { font-size: 0.66rem; line-height: 1; opacity: 0.75; }
+cc-events .cce-cal.is-range .cce-cal-m { font-size: 0.7rem; letter-spacing: 0.04em; }
 cc-events .cce-more { appearance: none; margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; border-top: 1px solid var(--cce-border); background: none; padding: 14px 0 0; font: 600 0.95rem var(--cce-body); color: var(--cce-primary); cursor: pointer; text-align: left; }
 cc-events .cce-more:hover { color: var(--cce-deep); }
 
@@ -232,17 +256,60 @@ cc-events [hidden] { display: none !important; }
     };
   }
 
+  // A session with an end date stands for a run of meetings (for example
+  // weekly from Jan 26 to Mar 30). It counts as upcoming until its last day.
   function normalizeSessions(list) {
     if (!Array.isArray(list)) return [];
     return list
-      .map((s) => ({
-        title: s && s.title ? String(s.title) : "",
-        date: dayKey(s && s.date),
-        time: (s && s.time) || "",
-        description: (s && s.description) || "",
-        link: (s && s.link) || "",
-      }))
+      .map((s) => {
+        const date = dayKey(s && s.date);
+        const end = dayKey(s && s.endDate);
+        return {
+          title: s && s.title ? String(s.title) : "",
+          date,
+          end: end > date ? end : "",
+          last: end > date ? end : date,
+          frequency: s && s.frequency ? String(s.frequency).trim() : "",
+          time: (s && s.time) || "",
+          description: (s && s.description) || "",
+          link: (s && s.link) || "",
+        };
+      })
       .filter((s) => s.title && s.date);
+  }
+
+  function addDays(key, n) {
+    const [y, m, d] = key.split("-").map(Number);
+    return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+  }
+
+  // The card's "Next:" date. A weekly run that has started gives its next
+  // meeting; another run that has started gives no single date, so the card
+  // says how long it runs.
+  function nextDate(sessions, today) {
+    const open = sessions.filter((s) => s.last >= today).sort((a, b) => a.date.localeCompare(b.date));
+    const s = open[0];
+    if (!s) return null;
+    if (s.date >= today) return { date: s.date };
+    if (/weekly/i.test(s.frequency)) {
+      let d = s.date;
+      while (d < today) d = addDays(d, 7);
+      if (d <= s.last) return { date: d };
+    }
+    return { until: s.last, frequency: s.frequency };
+  }
+
+  // "First sentence. The rest." -> ["First sentence.", "The rest."]. A period
+  // after a single capital (the "U." of "U.S.") doesn't end a sentence.
+  function splitNote(text) {
+    const re = /([.!?])\s+(?=[A-Z"“(])/g;
+    let m;
+    while ((m = re.exec(text))) {
+      const before = text.slice(0, m.index);
+      if (/(^|[\s.(])[A-Z]$/.test(before)) continue;
+      return [text.slice(0, m.index + 1), text.slice(m.index + 1).trim()];
+    }
+    return [text, ""];
   }
 
   function normalize(raw) {
@@ -275,6 +342,7 @@ cc-events [hidden] { display: none !important; }
           venue: m.venue || "",
           audience: m.audience || "",
           description: m.description || "",
+          note: m.note ? String(m.note).trim() : "",
           order: typeof m.order === "number" ? m.order : i + 1,
           photos,
           sessions: normalizeSessions(m.sessions),
@@ -285,7 +353,10 @@ cc-events [hidden] { display: none !important; }
 
   class CcEvents extends HTMLElement {
     static get observedAttributes() {
-      return ["events", "heading", "eyebrow", "more-label", "upcoming-label", "past-label", "link-label", "band", "band-depth"];
+      return [
+        "events", "heading", "eyebrow", "more-label", "upcoming-label", "past-label", "link-label",
+        "note-more-label", "note-less-label", "band", "band-depth",
+      ];
     }
 
     constructor() {
@@ -311,7 +382,7 @@ cc-events [hidden] { display: none !important; }
       if (!this._built) return;
       if (name === "events") this._readData();
       else if (name === "band" || name === "band-depth") this._placeBand();
-      else if (name === "more-label") {
+      else if (name === "more-label" || name === "note-more-label" || name === "note-less-label") {
         if (this._items) this._renderGrid();
       } else if (name === "heading" || name === "eyebrow") this._renderHead();
       else if (this._current) this._renderSessions(this._current);
@@ -352,6 +423,7 @@ cc-events [hidden] { display: none !important; }
                 <p class="cce-d-loc" data-d-loc></p>
                 <h3 class="cce-d-title" id="cce-d-title" data-d-title></h3>
                 <p class="cce-d-desc" data-d-desc></p>
+                <p class="cce-d-note" data-d-note></p>
               </div>
               <div class="cce-d-gal" data-d-gal>
                 <div class="cce-stage">
@@ -380,6 +452,7 @@ cc-events [hidden] { display: none !important; }
         dLoc: $("[data-d-loc]"),
         dTitle: $("[data-d-title]"),
         dDesc: $("[data-d-desc]"),
+        dNote: $("[data-d-note]"),
         dGal: $("[data-d-gal]"),
         dImg: $("[data-d-img]"),
         dNav: $("[data-d-nav]"),
@@ -396,8 +469,23 @@ cc-events [hidden] { display: none !important; }
         this._renderGrid();
       });
       this._el.grid.addEventListener("click", (e) => {
+        const toggle = e.target.closest("[data-note-toggle]");
+        if (toggle) {
+          const card = toggle.closest(".cce-card");
+          const full = card.querySelector("[data-note-full]");
+          const open = full.hidden;
+          full.hidden = !open;
+          card.querySelector("[data-note-more]").setAttribute("aria-expanded", String(open));
+          // Focus follows the panel, then returns to "Read more".
+          card.querySelector(open ? "[data-note-full] [data-note-toggle]" : "[data-note-more]").focus();
+          return;
+        }
         const b = e.target.closest("[data-open]");
         if (b) this._open(b.dataset.open, b);
+      });
+      this._el.grid.addEventListener("keydown", (e) => {
+        const full = e.key === "Escape" && e.target.closest("[data-note-full]");
+        if (full) full.querySelector("[data-note-toggle]").click();
       });
       this._el.overlay.addEventListener("click", (e) => {
         if (e.target === this._el.overlay) this._close();
@@ -511,24 +599,50 @@ cc-events [hidden] { display: none !important; }
     _renderGrid() {
       const list = this.events.filter((m) => this._filter === "all" || m.venue === this._filter);
       const label = this.getAttribute("more-label") || "View Details";
+      const noteMore = this.getAttribute("note-more-label") || "Read more";
+      const noteLess = this.getAttribute("note-less-label") || "Show less";
       const today = todayKey();
       this._el.grid.innerHTML = list
-        .map((m) => {
+        .map((m, i) => {
           const cover = m.photos[0];
-          const next = m.sessions.filter((s) => s.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+          const next = nextDate(m.sessions, today);
+          const nextText = !next
+            ? ""
+            : next.date
+              ? `Next: ${dayParts(next.date).short}`
+              : `${next.frequency ? `${next.frequency} until` : "Until"} ${dayParts(next.until).short}`;
+          const [lead, rest] = m.note ? splitNote(m.note) : ["", ""];
+          const fullId = `cce-note-${i}`;
+          let media;
+          if (cover) media = `<img src="${esc(imageUrl(cover, 800))}" alt="${esc(m.title)}" loading="lazy" width="800" height="600">`;
+          else if (m.note)
+            media = `
+              <div class="cce-note${m.audience ? " has-badge" : ""}">
+                <p class="cce-note-lead">${esc(lead)}</p>
+                ${rest ? `<button type="button" class="cce-note-btn" data-note-toggle data-note-more aria-expanded="false" aria-controls="${fullId}">${esc(noteMore)}</button>` : ""}
+              </div>`;
+          else media = `<div class="cce-ph" aria-hidden="true">${esc(m.title.charAt(0))}</div>`;
           return `
           <article class="cce-card">
             <div class="cce-media">
-              ${cover ? `<img src="${esc(imageUrl(cover, 800))}" alt="${esc(m.title)}" loading="lazy" width="800" height="600">` : `<div class="cce-ph" aria-hidden="true">${esc(m.title.charAt(0))}</div>`}
+              ${media}
               ${m.audience ? `<span class="cce-badge">${esc(m.audience)}</span>` : ""}
             </div>
             <div class="cce-body">
               ${m.venue ? `<p class="cce-loc">${PIN}${esc(m.venue)}</p>` : ""}
               <h3 class="cce-name">${esc(m.title)}</h3>
               <p class="cce-desc">${esc(m.description)}</p>
-              ${next ? `<p class="cce-next">${CALENDAR}<span>Next: ${esc(dayParts(next.date).short)}</span></p>` : ""}
+              ${nextText ? `<p class="cce-next">${CALENDAR}<span>${esc(nextText)}</span></p>` : ""}
               <button type="button" class="cce-more" data-open="${esc(m.id)}" aria-haspopup="dialog">${esc(label)} ${ARROW}</button>
             </div>
+            ${
+              !cover && rest
+                ? `<div class="cce-note-full" id="${fullId}" data-note-full hidden>
+                    <p>${esc(m.note)}</p>
+                    <button type="button" class="cce-note-btn" data-note-toggle>${esc(noteLess)}</button>
+                  </div>`
+                : ""
+            }
           </article>`;
         })
         .join("");
@@ -546,6 +660,8 @@ cc-events [hidden] { display: none !important; }
       e.dTitle.textContent = m.title;
       e.dDesc.textContent = m.description;
       e.dDesc.hidden = !m.description;
+      e.dNote.textContent = m.note;
+      e.dNote.hidden = !m.note;
       e.dGal.hidden = m.photos.length === 0;
       e.dNav.hidden = m.photos.length < 2;
       e.dThumbs.hidden = m.photos.length < 2;
@@ -570,20 +686,33 @@ cc-events [hidden] { display: none !important; }
       const box = this._el.dSes;
       const today = todayKey();
       const byDate = [...m.sessions].sort((a, b) => a.date.localeCompare(b.date));
-      const upcoming = byDate.filter((s) => s.date >= today);
-      const past = byDate.filter((s) => s.date < today).reverse();
+      const upcoming = byDate.filter((s) => s.last >= today);
+      // A past run is placed by its last day, so it sorts among single dates by when it ended.
+      const past = byDate.filter((s) => s.last < today).sort((a, b) => b.last.localeCompare(a.last));
       const linkLabel = this.getAttribute("link-label") || "Event page";
       const item = (s, up, hidden) => {
         const d = dayParts(s.date);
-        return `
-          <li class="cce-ses${up ? " is-up" : ""}"${hidden ? " hidden" : ""}>
-            <div class="cce-cal" aria-hidden="true">
+        const e = s.end ? dayParts(s.end) : null;
+        // A run: "Weekly · Mon, Jan 26 – Mon, Mar 30, 2026", the year once when both ends share it.
+        const when = e
+          ? `${s.frequency ? `${s.frequency} · ` : ""}${d.year === e.year ? d.short : d.long} – ${e.long}`
+          : d.long;
+        const cal = e
+          ? `<div class="cce-cal is-range" aria-hidden="true">
+              <span class="cce-cal-m">${esc(d.month)} ${esc(d.day)}</span>
+              <span class="cce-cal-to">–</span>
+              <span class="cce-cal-m">${esc(e.month)} ${esc(e.day)}</span>
+            </div>`
+          : `<div class="cce-cal" aria-hidden="true">
               <span class="cce-cal-m">${esc(d.month)}</span>
               <span class="cce-cal-d">${esc(d.day)}</span>
               <span class="cce-cal-y">${esc(d.year)}</span>
-            </div>
+            </div>`;
+        return `
+          <li class="cce-ses${up ? " is-up" : ""}"${hidden ? " hidden" : ""}>
+            ${cal}
             <div>
-              <p class="cce-ses-when">${esc(d.long)}${s.time ? ` · ${esc(s.time)}` : ""}</p>
+              <p class="cce-ses-when">${esc(when)}${s.time ? ` · ${esc(s.time)}` : ""}</p>
               <h4 class="cce-ses-title">${esc(s.title)}</h4>
               ${s.description ? `<p class="cce-ses-desc">${esc(s.description)}</p>` : ""}
               ${s.link ? `<a class="cce-ses-link" href="${esc(s.link)}" target="_blank" rel="noopener">${esc(linkLabel)} ${EXTERNAL}<span class="cce-sr"> (opens in a new tab)</span></a>` : ""}

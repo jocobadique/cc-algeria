@@ -69,8 +69,9 @@ Events collection:
 | Venue | `venue` | Pin line, and the filter buttons (shown when there is more than one venue) |
 | Audience | `audience` | Card badge and popup label, when set |
 | Description | `description` | Card text (3 lines) and popup text |
-| Cover Image | `coverImage` | Card image and first popup photo; without one the card shows a teal panel with the program's initial |
+| Cover Image | `coverImage` | Card image and first popup photo; without one the card shows a teal panel with the program's initial (or the Card Note) |
 | Gallery | `gallery` | More popup photos (media gallery field; videos are skipped) |
+| Card Note | `note` | A statement shown in full in the popup, under the description (the NSLI-Y funding statement). On a program without a Cover Image, the card shows its first sentence in place of the image, with "Read more" laying the whole note over the card |
 | Order | `order` | Card order |
 
 Sessions collection (one row per dated session; the page code attaches each program's rows to it as `sessions`):
@@ -79,7 +80,9 @@ Sessions collection (one row per dated session; the page code attaches each prog
 | --- | --- | --- |
 | Session Title | `title` | Session heading in the popup |
 | Program | `program` | Reference to the Events item the session belongs to |
-| Date | `date` | Date block and order. Sessions from today on are listed first under "Upcoming sessions" (soonest first), and the card shows "Next: <date>"; earlier ones follow under "Past sessions" (newest first, 4 shown until "Show all") |
+| Date | `date` | Date block and order (the first day of a run). Sessions from today on are listed first under "Upcoming sessions" (soonest first), and the card shows "Next: <date>"; earlier ones follow under "Past sessions" (newest first, 4 shown until "Show all") |
+| End Date | `endDate` | Optional. Makes the row a run of meetings, shown once as a date range ("Mon, Jan 26 – Mon, Mar 30, 2026") with both days in the date block. A run stays under "Upcoming sessions" until its end date; while it's going on the card shows the next meeting when Repeats is "Weekly" |
+| Repeats | `frequency` | Optional text before a run's dates, for example "Weekly" |
 | Time | `time` | Free text after the date, for example "6:00 - 7:30 pm" |
 | Description | `description` | Session text, when set |
 | Event Link | `link` | "Event page" link (opens the library's event page in a new tab), when set |
@@ -102,8 +105,9 @@ Same setup, with two elements on the homepage and one page code file for both, `
 | --- | --- | --- | --- | --- |
 | Our Team | `dist/cc-team.js` | `cc-team` | `#customElement1` | `team` |
 | Educational Videos | `dist/cc-videos.js` | `cc-videos` | `#customElement2` | `videos` |
+| Impact numbers (hero) | `dist/cc-impact.js` | `cc-impact` | `#customElement3` | `impact` |
 
-Each section's heading stays native Wix text above its element, and so do the YouTube channel boxes under the playlists ("100+ Educational Videos", "New Videos every week").
+The impact numbers sit in the hero under the native H1 and intro, with `layout="highlights"` and `link="/impact"` set on the element (see [Impact page](#impact-page)). Each section's heading stays native Wix text above its element, and so do the YouTube channel boxes under the playlists ("100+ Educational Videos", "New Videos every week").
 
 Team collection:
 
@@ -160,9 +164,11 @@ Impact collection (one item per number):
 
 Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). `band` and `band-depth` work as on the Events and Partners elements (see [Cards overlapping the header](#cards-overlapping-the-header)); on the Impact page the band reaches into the first row of number tiles. The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#effbfa`, a light turquoise tint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 
+Homepage highlights: with `layout="highlights"` the element shows only the ungrouped Impact items that have a Value, as a compact row (4 across on desktop, 2 on tablets and phones): the number, its label and the first line of its Detail (the program). The numbers count up from zero when the row comes into view (not for visitors who ask for reduced motion). `limit` caps how many are shown; `link` adds a button under the row (for example `/impact`) and `link-label` sets its text (default "See our impact").
+
 ### Events and Partners attributes
 
-Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"). On `cc-partners`: `link-label` (default "Visit website").
+Optional attributes: `eyebrow` and `heading` on both. On `cc-events`: `more-label` (card button, default "View Details"), `upcoming-label` and `past-label` (session list headings, default "Upcoming sessions" and "Past sessions"), `link-label` (session link, default "Event page"), `note-more-label` and `note-less-label` (the card note's buttons, default "Read more" and "Show less"). On `cc-partners`: `link-label` (default "Visit website").
 
 ### Cards overlapping the header
 

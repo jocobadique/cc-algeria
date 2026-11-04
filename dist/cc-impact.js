@@ -1,4 +1,4 @@
-/*! cc-impact v1.8.0 */
+/*! cc-impact v1.9.0 */
 /*
  * <cc-impact> — Classic Compass impact numbers.
  * A Wix custom element for the Classic Compass Wix Studio site
@@ -44,6 +44,13 @@
  *                      section, so the element should be the first thing in its section.
  *   band-depth       — how far the band reaches into the first row, in pixels
  *                      (default 140).
+ *   layout           — "highlights" for the homepage hero: a compact row of the
+ *                      ungrouped numbers that have a value (label and program
+ *                      line under each), counting up when they come into view.
+ *                      Placeholders, groups and programs are left out.
+ *   limit            — highlights only: show at most this many numbers.
+ *   link, link-label — highlights only: a button under the row (for example
+ *                      link="/impact"); label default "See our impact".
  */
 (() => {
   const TAG = "cc-impact";
@@ -133,6 +140,27 @@ cc-impact .cci-points li::before { content: ""; position: absolute; left: 2px; t
   cc-impact .cci-prog-body { padding: 24px 22px 26px; gap: 12px; }
 }
 
+/* Highlights (layout="highlights"): a compact row of the known numbers for
+   the homepage hero, with a link to the Impact page. */
+cc-impact .cci-hl { --cci-hl-cols: 4; display: grid; grid-template-columns: repeat(var(--cci-hl-cols), minmax(0, 1fr)); gap: 18px; }
+cc-impact .cci-hl-tile { min-width: 0; display: flex; flex-direction: column; padding: 20px 20px 18px; background: var(--cci-card); border: 2px solid var(--cci-deep); border-radius: 20px; box-shadow: 5px 5px 0 var(--cci-accent); }
+cc-impact .cci-hl-value { margin: 0; font: 600 clamp(2.1rem, 3.4vw, 2.8rem)/1 var(--cci-display); color: var(--cci-primary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+cc-impact .cci-hl-label { margin: 8px 0 0; font: 600 0.9rem/1.35 var(--cci-body); color: var(--cci-deep); }
+cc-impact .cci-hl-prog { margin: auto 0 0; padding-top: 10px; font-size: 0.76rem; line-height: 1.4; color: var(--cci-muted); }
+cc-impact .cci-hl-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 12px 22px; border-radius: 999px; background: var(--cci-deep); color: #fff; font: 600 0.92rem/1 var(--cci-body); text-decoration: none; transition: background .2s, color .2s; }
+cc-impact .cci-hl-link svg { color: var(--cci-accent); transition: transform .2s; }
+cc-impact .cci-hl-link:hover { background: var(--cci-primary); }
+cc-impact .cci-hl-link:hover svg { transform: translateX(3px); color: #fff; }
+cc-impact .cci-hl-link:focus-visible { outline: 3px solid var(--cci-accent); outline-offset: 3px; }
+@media (max-width: 900px) { cc-impact .cci-hl { --cci-hl-cols: 2 !important; gap: 14px; } }
+@media (max-width: 420px) {
+  cc-impact .cci-hl { gap: 12px; }
+  cc-impact .cci-hl-tile { padding: 16px 14px 14px; border-radius: 16px; box-shadow: 4px 4px 0 var(--cci-accent); }
+  cc-impact .cci-hl-value { font-size: 1.9rem; }
+  cc-impact .cci-hl-label { font-size: 0.8rem; }
+  cc-impact .cci-hl-prog { font-size: 0.7rem; }
+}
+
 cc-impact .cci-skel { flex: 0 1 calc((100% - (var(--cci-cols) - 1) * var(--cci-gap)) / var(--cci-cols)); min-height: 180px; border-radius: 24px; background: linear-gradient(90deg, var(--cci-secondary), #effbfa, var(--cci-secondary)); background-size: 200% 100%; animation: cci-shimmer 1.4s infinite; }
 @keyframes cci-shimmer { to { background-position: -200% 0; } }
 cc-impact [hidden] { display: none !important; }
@@ -168,6 +196,8 @@ cc-impact [hidden] { display: none !important; }
 
   const PIN =
     '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
+  const ARROW =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
   const AWARD =
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 13.9 7 22l5-3 5 3-1.5-8.1"/></svg>';
 
@@ -183,6 +213,17 @@ cc-impact [hidden] { display: none !important; }
     }
     return v;
   }
+
+  // "~50" -> { before: "~", n: 50, after: "", digits: "50" }; null when the
+  // value has no number to count up to.
+  function countable(value) {
+    const m = String(value).match(/^(\D*?)(\d[\d,]*)(\D*)$/);
+    if (!m) return null;
+    const n = Number(m[2].replace(/,/g, ""));
+    return Number.isFinite(n) && n > 0 ? { before: m[1], n, after: m[3], grouped: m[2].includes(",") } : null;
+  }
+
+  const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // A CMS text field with one entry per line; a leading "-" or "•" is dropped.
   const lines = (text) =>
@@ -239,7 +280,10 @@ cc-impact [hidden] { display: none !important; }
 
   class CcImpact extends HTMLElement {
     static get observedAttributes() {
-      return ["impact", "programs", "heading", "eyebrow", "pending-label", "programs-heading", "heading-level", "band", "band-depth"];
+      return [
+        "impact", "programs", "heading", "eyebrow", "pending-label", "programs-heading", "heading-level", "band", "band-depth",
+        "layout", "limit", "link", "link-label",
+      ];
     }
 
     constructor() {
@@ -261,6 +305,7 @@ cc-impact [hidden] { display: none !important; }
 
     disconnectedCallback() {
       if (this._ro) this._ro.disconnect();
+      if (this._io) this._io.disconnect();
       if (this._onResize) window.removeEventListener("resize", this._onResize);
     }
 
@@ -395,7 +440,71 @@ cc-impact [hidden] { display: none !important; }
         .join("");
     }
 
+    // The homepage row: the ungrouped numbers that have a value, each with its
+    // label and the first line of its detail (the program), then the link.
+    _renderHighlights() {
+      const limit = parseInt(this.getAttribute("limit"), 10);
+      let items = this.impact.filter((i) => !i.group && i.value);
+      if (limit > 0) items = items.slice(0, limit);
+      const href = this.getAttribute("link");
+      const linkLabel = this.getAttribute("link-label") || "See our impact";
+      const cols = items.length >= 4 ? 4 : Math.max(items.length, 1);
+      this._el.groups.innerHTML =
+        `<div class="cci-hl" style="--cci-hl-cols: ${cols}">` +
+        items
+          .map((item) => {
+            const program = item.detail.split(/\r?\n/)[0].trim();
+            return `
+            <div class="cci-hl-tile">
+              <p class="cci-hl-value" data-value="${esc(item.value)}">${esc(item.value)}</p>
+              <p class="cci-hl-label">${esc(item.title)}</p>
+              ${program ? `<p class="cci-hl-prog">${esc(program)}</p>` : ""}
+            </div>`;
+          })
+          .join("") +
+        `</div>` +
+        (href ? `<a class="cci-hl-link" href="${esc(href)}">${esc(linkLabel)} ${ARROW}</a>` : "");
+      this._countUp();
+    }
+
+    // The numbers count up from zero the first time the row comes into view.
+    // The real value is in the markup and is put back at the end; nothing
+    // moves for visitors who ask for reduced motion.
+    _countUp() {
+      if (this._io) this._io.disconnect();
+      if (reducedMotion() || !("IntersectionObserver" in window)) return;
+      const nodes = [...this._el.groups.querySelectorAll("[data-value]")]
+        .map((el) => ({ el, c: countable(el.dataset.value) }))
+        .filter((x) => x.c);
+      if (!nodes.length) return;
+      const show = (x, n) => {
+        const num = x.c.grouped ? n.toLocaleString("en-US") : String(n);
+        x.el.textContent = `${x.c.before}${num}${x.c.after}`;
+      };
+      nodes.forEach((x) => show(x, 0));
+      this._io = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        this._io.disconnect();
+        const start = performance.now();
+        const duration = 1400;
+        const step = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const ease = 1 - Math.pow(1 - t, 3);
+          nodes.forEach((x) => show(x, Math.round(x.c.n * ease)));
+          if (t < 1) requestAnimationFrame(step);
+          else nodes.forEach((x) => (x.el.textContent = x.el.dataset.value));
+        };
+        requestAnimationFrame(step);
+      }, { threshold: 0.3 });
+      this._io.observe(this._el.groups);
+    }
+
     _renderGroups() {
+      if (this.getAttribute("layout") === "highlights") {
+        this._renderHighlights();
+        return;
+      }
+      if (this._io) this._io.disconnect();
       const pending = this.getAttribute("pending-label") || "Coming soon";
       const level = this.getAttribute("heading-level") === "2" ? 2 : 3;
       const h = `h${level}`;

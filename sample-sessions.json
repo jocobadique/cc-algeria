@@ -123,7 +123,9 @@
     "title": "Stories That Shape Us",
     "program": "dda29f8c-3be6-4389-a0c5-3c0f68a5add9",
     "date": "2026-01-26",
-    "time": "Mondays, 6:00 - 8:00 pm, through March 30",
+    "endDate": "2026-03-30",
+    "frequency": "Weekly",
+    "time": "6:00 - 8:00 pm",
     "description": "Each participant will receive a research kit including a journal, sketch book, art supplies, bookmark, poem magnets and more!",
     "link": "https://events.erielibrary.org/event/15717118"
   },

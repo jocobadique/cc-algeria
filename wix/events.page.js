@@ -3,7 +3,9 @@
 //
 // Reads the "Events" CMS collection and hands the items to <cc-events>.
 // Order sets the card order. Each program gets its rows from the "Sessions"
-// collection (matched on the Program reference) as `sessions`.
+// collection (matched on the Program reference) as `sessions`. A session with
+// an End Date (and a Repeats text such as "Weekly") is one row for a run of
+// meetings. An event's Card Note is passed along with its other fields.
 import wixData from "wix-data";
 
 // Date fields come back as "YYYY-MM-DD"; a Date object is turned into the
@@ -34,6 +36,8 @@ $w.onReady(async () => {
     (byProgram[id] = byProgram[id] || []).push({
       title: s.title,
       date: dayKey(s.date),
+      endDate: dayKey(s.endDate),
+      frequency: s.frequency,
       time: s.time,
       description: s.description,
       link: s.link,
