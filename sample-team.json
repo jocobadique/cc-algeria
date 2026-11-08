@@ -8,7 +8,9 @@
     "linkUrl": "https://www.nsliforyouth.org/stories/trilateral-youth-korean-high-tech-firm-expedition-reflection/",
     "linkLabel": "Read Silvia's NSLI-Y story",
     "isFounder": true,
-    "order": 1
+    "order": 1,
+    "link2Url": "/publications",
+    "link2Label": "Publications"
   },
   {
     "_id": "dfb00835-d0c1-485d-9be6-c354fa9724cb",
@@ -65,13 +67,29 @@
     "order": 7
   },
   {
+    "_id": "995755cf-058a-4d03-8460-f895a1d895a2",
+    "title": "Maria",
+    "bio": "Maria is a Spanish-American high school student passionate about global studies, languages and cross cultural learning. She is a Youth Ambassador with the U.S. Department of State’s Algeria program and enjoys exploring how communities and histories shape the world around her.",
+    "photo": "wix:image://v1/d788fe_b739ba4fb29749f1a6017f75bb0d425c~mv2.jpg/Maria-team.jpg#originWidth=800&originHeight=800",
+    "isFounder": false,
+    "order": 8
+  },
+  {
+    "_id": "3b61226c-699c-4251-899c-23d9fb5f6ee7",
+    "title": "Charaf",
+    "bio": "Charaf Eddine Bala is an Algerian student and youth leader from Timgad, passionate about history, cultural heritage, and community engagement. As the founder of Memoria Timgad, he aims to bring Algeria’s rich history closer to younger generations through education and technology.",
+    "photo": "wix:image://v1/d788fe_b103917ccf2d49dc92e2e2ee28b2a917~mv2.jpg/Charaf-team-crop.jpg#originWidth=1012&originHeight=1266",
+    "isFounder": false,
+    "order": 9
+  },
+  {
     "_id": "150d6b64-e452-4a06-a4a6-9dd8cf095ec3",
     "title": "Naj",
     "eyebrow": "Outreach Specialist",
     "bio": "My name is Naj, a high school student and I am happy to serve as Outreach Specialist for Classic Compass.",
     "photo": "wix:image://v1/884fc5_218920c277a34bdbb2b7f4c4bee75bf5~mv2.png/884fc5_218920c277a34bdbb2b7f4c4bee75bf5~mv2.png#originWidth=2236&originHeight=2984",
     "isFounder": false,
-    "order": 8
+    "order": 10
   },
   {
     "_id": "c44ab595-bf64-4c13-a357-8d72257fb747",
@@ -80,7 +98,7 @@
     "bio": "My name is Mariam, and I am a high school student, am active in theater, school store, spirit council, black history and women history month committee etc. I have a passion for graphic design and arts. I am a first grandchild born in America, planning on becoming a doctor so that when I visit my family in Tanzania, I can help them with any health problems they may have.",
     "photo": "wix:image://v1/884fc5_7281473cfe8843d782c8ecdac54b3b7a~mv2.jpg/884fc5_7281473cfe8843d782c8ecdac54b3b7a~mv2.jpg#originWidth=1024&originHeight=1024",
     "isFounder": false,
-    "order": 9
+    "order": 11
   },
   {
     "_id": "7f019a2b-0886-4706-8daa-5356f58af3b1",
@@ -89,6 +107,6 @@
     "bio": "Asheen Udgiri is a youth leader, public health advocate, and Commissioner on Pennsylvania’s Governor’s Advisory Commission on Next Generation Engagement. Named the American Heart Association’s 2025 Teen of Impact, she raised over $39,000 through Mission AED to expand defibrillator access. As Vice President of Hear Erie’s Youth, she has helped allocate over $70,000 in community grants. An 18 Under 18 honoree, Asheen also advocates for mental health access, equity, and student leadership across Pennsylvania.",
     "photo": "wix:image://v1/884fc5_d04f8cf2935e4bb6a04651bf347f0a4a~mv2.png/884fc5_d04f8cf2935e4bb6a04651bf347f0a4a~mv2.png#originWidth=944&originHeight=1366",
     "isFounder": false,
-    "order": 10
+    "order": 12
   }
 ]

@@ -7,6 +7,10 @@
  * items in as JSON on the `team` attribute:
  *   $w('#customElement1').setAttribute('team', JSON.stringify(items))
  * The photo can be a Wix image URI (wix:image://v1/...) or a plain URL.
+ * Each member can have up to two links: Link URL / Link Label and Second Link
+ * URL / Second Link Label (link2Url / link2Label). A link to this site (a path
+ * like /publications or a classiccompass.org URL) opens in the same tab,
+ * other links in a new tab.
  *
  * The founder (Founder checked) gets a full-width card on top; everyone else
  * follows in a 3-column grid. Long bios are cut to a few lines with a toggle
@@ -73,7 +77,8 @@ cc-team .cct-bio { margin: 12px 0 0; font-size: 0.95rem; color: var(--cct-muted)
 cc-team .cct-bio.is-clamped { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; }
 cc-team .cct-toggle { align-self: flex-start; margin: 8px 0 0; padding: 0; border: 0; background: none; font: 600 0.9rem var(--cct-body); color: var(--cct-primary); cursor: pointer; }
 cc-team .cct-toggle:hover, cc-team .cct-link:hover { color: var(--cct-deep); }
-cc-team .cct-link { margin-top: auto; padding-top: 14px; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font: 600 0.95rem var(--cct-body); color: var(--cct-primary); text-decoration: none; }
+cc-team .cct-links { margin-top: auto; padding-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+cc-team .cct-link { display: inline-flex; align-items: center; gap: 6px; font: 600 0.95rem var(--cct-body); color: var(--cct-primary); text-decoration: none; }
 
 /* Founder: a full-width card in the mint, photo beside the text. */
 cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-accent); box-shadow: 6px 6px 0 var(--cct-deep); }
@@ -125,6 +130,17 @@ cc-team [hidden] { display: none !important; }
 
   const esc = (s) =>
     String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  // A path (/publications) or a URL on this site's own host stays in the same tab.
+  function isOwnSite(url) {
+    if (/^\/(?!\/)/.test(url)) return true;
+    try {
+      const host = new URL(url).hostname.replace(/^www\./, "");
+      return host === location.hostname.replace(/^www\./, "") || host === "classiccompass.org";
+    } catch (e) {
+      return false;
+    }
+  }
 
   // wix:image://v1/<mediaId>/<name>#originWidth=..  ->  https://static.wixstatic.com/media/<mediaId>
   // fitted inside a size x size box, not cropped.
@@ -206,6 +222,8 @@ cc-team [hidden] { display: none !important; }
         photo: m.photo || "",
         linkUrl: m.linkUrl || "",
         linkLabel: m.linkLabel || "",
+        link2Url: m.link2Url || "",
+        link2Label: m.link2Label || "",
         founder: m.isFounder === true,
         order: typeof m.order === "number" ? m.order : i + 1,
       }))
@@ -303,6 +321,11 @@ cc-team [hidden] { display: none !important; }
     _renderGrid() {
       const more = this.getAttribute("more-label") || "Read more";
       const fallbackLink = this.getAttribute("link-label") || "Learn more";
+      const link = (url, label) => {
+        if (!url) return "";
+        const external = !isOwnSite(url) ? ' target="_blank" rel="noopener"' : "";
+        return `<a class="cct-link" href="${esc(url)}"${external}>${esc(label || fallbackLink)} ${ARROW}</a>`;
+      };
       this._el.grid.innerHTML = this.team
         .map((m) => {
           const size = m.founder ? 640 : 480;
@@ -317,7 +340,7 @@ cc-team [hidden] { display: none !important; }
               <h3 class="cct-name">${esc(m.title)}</h3>
               ${m.bio ? `<p class="cct-bio${m.founder ? "" : " is-clamped"}" id="${esc(bioId)}">${esc(m.bio)}</p>` : ""}
               ${m.bio && !m.founder ? `<button class="cct-toggle" type="button" aria-expanded="false" aria-controls="${esc(bioId)}" hidden>${esc(more)}</button>` : ""}
-              ${m.linkUrl ? `<a class="cct-link" href="${esc(m.linkUrl)}" target="_blank" rel="noopener">${esc(m.linkLabel || fallbackLink)} ${ARROW}</a>` : ""}
+              ${m.linkUrl || m.link2Url ? `<div class="cct-links">${link(m.linkUrl, m.linkLabel)}${link(m.link2Url, m.link2Label)}</div>` : ""}
             </div>
           </article>`;
         })

@@ -118,7 +118,8 @@ Team collection:
 | Bio | `bio` | Card text. Long bios are cut to 6 lines with a "Read more" toggle; the full text is always in the page |
 | Photo | `photo` | Shown whole (fitted, not cropped), standing on the bottom edge of the photo area, since the photos are cutouts in many shapes; without one the card shows the name's initial |
 | Founder | `isFounder` | Puts the member in the wide turquoise card on top |
-| Link URL / Link Label | `linkUrl`, `linkLabel` | A link under the bio (new tab), when Link URL is set |
+| Link URL / Link Label | `linkUrl`, `linkLabel` | A link under the bio, when Link URL is set |
+| Second Link URL / Second Link Label | `link2Url`, `link2Label` | A second link beside the first (Silvia's card: "Publications" → `/publications`). A link to this site (a path like `/publications` or a classiccompass.org URL) opens in the same tab, other links in a new tab |
 | Order | `order` | Card order |
 
 Optional attributes: `eyebrow` and `heading`, `more-label` and `less-label` (bio toggle, default "Read more" and "Show less"), `link-label` (used when Link Label is empty, default "Learn more").

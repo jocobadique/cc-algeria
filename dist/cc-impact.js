@@ -1,4 +1,4 @@
-/*! cc-impact v1.9.0 */
+/*! cc-impact v1.10.0 */
 /*
  * <cc-impact> — Classic Compass impact numbers.
  * A Wix custom element for the Classic Compass Wix Studio site
