@@ -8,9 +8,12 @@
  *   $w('#customElement2').setAttribute('videos', JSON.stringify(items))
  * The image can be a Wix image URI (wix:image://v1/...) or a plain URL.
  *
- * Each playlist is a card: image, title, description and a button that opens
- * the YouTube link in a new tab. Line breaks in the title and description are
- * kept, so a bilingual title or a second paragraph stays as typed in the CMS.
+ * Each playlist is a card: image, title, a red YouTube-style button that opens
+ * the YouTube link in a new tab, then the description. The button sits right
+ * under the title so it is in view as soon as the cards are, and the cards in
+ * a row share their row heights (CSS subgrid) so the buttons line up. Line
+ * breaks in the title and description are kept, so a bilingual title or a
+ * second paragraph stays as typed in the CMS.
  *
  * It renders into the light DOM (not a shadow root) so titles and
  * descriptions are part of the page for search engines. All styles are
@@ -38,6 +41,8 @@ cc-videos {
   --ccv-accent: #2ec4b6;
   --ccv-muted: #1f3a3c;
   --ccv-border: #cfe2e0;
+  --ccv-red: #e00000;
+  --ccv-red-dark: #b00000;
   --ccv-display: "Fraunces", Georgia, "Times New Roman", serif;
   --ccv-body: "Poppins", "Segoe UI", system-ui, sans-serif;
   display: block;
@@ -55,19 +60,26 @@ cc-videos .ccv-title { margin: 0; font: 500 clamp(1.9rem, 3.4vw, 2.9rem)/1.12 va
 cc-videos .ccv-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 @media (max-width: 760px) { cc-videos .ccv-grid { grid-template-columns: 1fr; gap: 20px; } }
 
-cc-videos .ccv-card { display: flex; flex-direction: column; min-width: 0; background: var(--ccv-card); border: 2px solid var(--ccv-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--ccv-accent); }
+/* Card rows: image, title, button, description. With subgrid the cards in a
+   row share these rows, so a two-line title in one card doesn't push its
+   button below the other card's. Without subgrid each card just stacks. */
+cc-videos .ccv-card { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; min-width: 0; background: var(--ccv-card); border: 2px solid var(--ccv-deep); border-radius: 24px; overflow: hidden; box-shadow: 6px 6px 0 var(--ccv-accent); }
 cc-videos .ccv-media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--ccv-accent); border-bottom: 2px solid var(--ccv-deep); }
 cc-videos .ccv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
 cc-videos .ccv-card:hover .ccv-media img { transform: scale(1.04); }
-cc-videos .ccv-play { position: absolute; left: 14px; top: 14px; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--ccv-deep); color: var(--ccv-accent); }
-cc-videos .ccv-body { display: flex; flex-direction: column; flex: 1; gap: 12px; padding: 28px; }
-cc-videos .ccv-name { margin: 0; font: 600 1.5rem/1.2 var(--ccv-display); color: var(--ccv-deep); white-space: pre-line; text-wrap: balance; }
-cc-videos .ccv-desc { margin: 0; font-size: 0.97rem; color: var(--ccv-muted); white-space: pre-line; }
-cc-videos .ccv-btn { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 12px 26px; border: 2px solid var(--ccv-deep); border-radius: 999px; background: var(--ccv-deep); color: #fff; font: 600 0.95rem/1.2 var(--ccv-body); text-decoration: none; transition: background .2s, color .2s; }
-cc-videos .ccv-btn svg { color: var(--ccv-accent); transition: color .2s; }
-cc-videos .ccv-btn:hover { background: var(--ccv-accent); color: var(--ccv-deep); }
-cc-videos .ccv-btn:hover svg { color: var(--ccv-deep); }
-@media (max-width: 640px) { cc-videos .ccv-body { padding: 24px; } }
+cc-videos .ccv-play { position: absolute; left: 14px; top: 14px; width: 58px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--ccv-red); color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
+cc-videos .ccv-name { margin: 26px 28px 0; font: 600 1.5rem/1.2 var(--ccv-display); color: var(--ccv-deep); white-space: pre-line; text-wrap: balance; }
+cc-videos .ccv-act { margin: 16px 28px 0; }
+cc-videos .ccv-desc { margin: 18px 28px 28px; font-size: 0.97rem; color: var(--ccv-muted); white-space: pre-line; }
+cc-videos .ccv-desc:empty { margin-top: 0; }
+cc-videos .ccv-btn { display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 12px 26px 12px 20px; border: 2px solid var(--ccv-deep); border-radius: 999px; background: var(--ccv-red); color: #fff; font: 600 0.95rem/1.2 var(--ccv-body); text-decoration: none; box-shadow: 3px 3px 0 var(--ccv-deep); transition: background .2s, transform .2s, box-shadow .2s; }
+cc-videos .ccv-btn svg { flex: none; }
+cc-videos .ccv-btn:hover { background: var(--ccv-red-dark); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ccv-deep); }
+@media (max-width: 640px) {
+  cc-videos .ccv-name { margin: 22px 24px 0; }
+  cc-videos .ccv-act { margin: 14px 24px 0; }
+  cc-videos .ccv-desc { margin: 16px 24px 24px; }
+}
 
 cc-videos .ccv-skel { background: linear-gradient(90deg, var(--ccv-secondary), #effbfa, var(--ccv-secondary)); background-size: 200% 100%; animation: ccv-shimmer 1.4s infinite; border-radius: 24px; min-height: 420px; }
 @keyframes ccv-shimmer { to { background-position: -200% 0; } }
@@ -78,8 +90,12 @@ cc-videos [hidden] { display: none !important; }
 }
 `;
 
+  // Play triangle for the red badge on the image.
   const PLAY =
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>';
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>';
+  // A white rounded "player" with a red triangle, for the red button.
+  const PLAYER =
+    '<svg width="26" height="18" viewBox="0 0 26 18" aria-hidden="true"><rect width="26" height="18" rx="5" fill="#fff"/><path d="M10.5 4.8v8.4L17.5 9z" fill="#e00000"/></svg>';
 
   function ensureAssets() {
     if (!document.querySelector(`link[data-${TAG}-fonts]`)) {
@@ -225,11 +241,9 @@ cc-videos [hidden] { display: none !important; }
           return `
           <article class="ccv-card">
             ${v.link ? `<a class="ccv-media" href="${esc(v.link)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${media}</a>` : `<div class="ccv-media">${media}</div>`}
-            <div class="ccv-body">
-              <h3 class="ccv-name">${esc(v.title)}</h3>
-              ${v.description ? `<p class="ccv-desc">${esc(v.description)}</p>` : ""}
-              ${v.link ? `<a class="ccv-btn" href="${esc(v.link)}" target="_blank" rel="noopener">${PLAY} ${esc(label)}</a>` : ""}
-            </div>
+            <h3 class="ccv-name">${esc(v.title)}</h3>
+            <div class="ccv-act">${v.link ? `<a class="ccv-btn" href="${esc(v.link)}" target="_blank" rel="noopener">${PLAYER} ${esc(label)}</a>` : ""}</div>
+            <p class="ccv-desc">${esc(v.description)}</p>
           </article>`;
         })
         .join("");

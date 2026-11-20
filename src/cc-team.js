@@ -13,7 +13,9 @@
  * other links in a new tab.
  *
  * The founder (Founder checked) gets a full-width card on top; everyone else
- * follows in a 3-column grid. Long bios are cut to a few lines with a toggle
+ * follows in a 3-column grid. On the founder card the links are buttons: the
+ * last one (the second link when there are two) is the solid, most prominent
+ * one, the first an outline button. Long bios are cut to a few lines with a toggle
  * to read the rest; the full text is always in the page.
  *
  * It renders into the light DOM (not a shadow root) so names and bios are
@@ -84,7 +86,12 @@ cc-team .cct-link { display: inline-flex; align-items: center; gap: 6px; font: 6
 cc-team .cct-founder { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 40px; padding: 36px 40px; background: var(--cct-accent); box-shadow: 6px 6px 0 var(--cct-deep); }
 cc-team .cct-founder:hover { box-shadow: 9px 9px 0 var(--cct-deep); }
 cc-team .cct-founder .cct-eyebrow, cc-team .cct-founder .cct-toggle, cc-team .cct-founder .cct-link { color: var(--cct-deep); }
-cc-team .cct-founder .cct-toggle, cc-team .cct-founder .cct-link { text-decoration: underline; text-underline-offset: 3px; }
+cc-team .cct-founder .cct-toggle { text-decoration: underline; text-underline-offset: 3px; }
+cc-team .cct-founder .cct-links { padding-top: 22px; gap: 14px 16px; }
+cc-team .cct-founder .cct-link { min-height: 48px; padding: 11px 22px; border: 2px solid var(--cct-deep); border-radius: 999px; background: transparent; font-size: 0.97rem; line-height: 1.2; transition: background .2s, color .2s, transform .2s, box-shadow .2s; }
+cc-team .cct-founder .cct-link:hover { background: var(--cct-deep); color: #fff; }
+cc-team .cct-founder .cct-link:last-child { background: var(--cct-deep); color: #fff; box-shadow: 4px 4px 0 #fff; }
+cc-team .cct-founder .cct-link:last-child:hover { background: #fff; color: var(--cct-deep); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--cct-deep); }
 cc-team .cct-founder .cct-photo { width: 300px; height: 300px; border: 0; }
 cc-team .cct-founder .cct-photo img { object-position: center; transition: opacity .25s; }
 cc-team .cct-photo img[data-trim]:not(.is-ready) { opacity: 0; }

@@ -8,8 +8,8 @@ The repo also holds two more elements built the same way, each for its own page 
 
 - `<cc-events>`: the programs from the **Events** collection, as cards with venue filters and a details popup with a photo gallery and the program's dated sessions from the **Sessions** collection.
 - `<cc-partners>`: the partners from the **Partners** collection, as logo cards with collaboration details and a website link.
-- `<cc-team>`: the team section on the homepage, from the **Team** collection: a wide card for the founder, then a card per member with photo, eyebrow, name and bio.
-- `<cc-videos>`: the educational videos on the homepage, from the **Videos** collection: a card per YouTube playlist with image, title, description and a Watch Playlist button.
+- `<cc-team>`: the team section on the homepage, from the **Team** collection: a wide card for the founder, then a card per member with photo, eyebrow, name and bio. The founder card shows its links as buttons, the last one solid.
+- `<cc-videos>`: the educational videos on the homepage, from the **Videos** collection: a card per YouTube playlist with image, title, a red YouTube-style Watch Playlist button (right under the title, lined up across a row) and description.
 
 ## Use in Wix Studio
 
