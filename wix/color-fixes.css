@@ -1,0 +1,55 @@
+/* Bright Turquoise color fixes for Studio's global.css (2026-11-05).
+   1) and 2) replace rules that are already in global.css; 3) is new.
+   Ink #08201F, turquoise #2EC4B6, Light BG #D5F3F0. */
+
+/* 1) Algeria hero photo overlay: deep teal rgba(0, 60, 64) -> ink rgba(8, 32, 31). */
+#SITE_CONTAINER #main_MF#main_MF .css-editing-scope .wixui-leftmask_effect.wixui-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(8, 32, 31, 0.92) 0%,
+    rgba(8, 32, 31, 0.8) 30%,
+    rgba(8, 32, 31, 0.4) 65%,
+    rgba(8, 32, 31, 0.15) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+@media (max-width: 750px) {
+  #SITE_CONTAINER #main_MF#main_MF .css-editing-scope .wixui-leftmask_effect.wixui-section::before {
+    background: rgba(8, 32, 31, 0.7);
+  }
+}
+
+/* 2) Homepage accent bar: old teal #00838a -> turquoise. */
+#SITE_CONTAINER #main_MF#main_MF .css-editing-scope .wixui-leftbar-accent.wixui-rich-text {
+  border-left: 4px solid #2ec4b6;
+  padding-left: 16px;
+}
+
+/* 3) Be a Guest card (class cc-guest-card on the card container), like the elements' cards. */
+.cc-guest-card {
+  background: #ffffff !important;
+  border: 2px solid #08201f !important;
+  border-radius: 16px !important;
+  box-shadow: 6px 6px 0 #2ec4b6 !important;
+}
+
+/* 4) Turquoise offset shadow like the Contact button (class cc-shadow-btn; Algeria "Explore now"). */
+.cc-shadow-btn,
+.cc-shadow-btn:hover,
+.cc-shadow-btn:focus-visible {
+  box-shadow: 4px 4px 0 #2ec4b6 !important;
+}
+
+/* 5) Header: 3px turquoise line under the header (menu Option A), class cc-header-line on the
+   header section. Wix strips border and position on the header, so it is an outer shadow.
+   z-index must stay high: the Events dropdown hangs below the header, and with a low value
+   (it was 2) the homepage hero (its container is also z-index 2, later in the page) covers
+   the dropdown, so "Impact" can't be clicked. */
+.cc-header-line {
+  box-shadow: 0 3px 0 0 #2ec4b6 !important;
+  z-index: 100 !important;
+}

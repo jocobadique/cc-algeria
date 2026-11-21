@@ -162,6 +162,7 @@ Impact collection (one item per number):
 | Group | `group` | Items with the same group are shown together under that name, for example "NSLI-Y Workshops: Target Outcomes". Items without a group come first, with no heading |
 | Order | `order` | Tile order (and group order, by each group's first item) |
 | Published | `published` | Unchecked items are hidden |
+| Featured | `featured` | A headline total, for example "250+" / "students in total" (needs a Value and no Group). On the Impact page it is a wide turquoise tile above the other numbers; in the homepage highlights it is the first tile, in turquoise (5 across on desktop; on tablets and phones it takes the first row when the count is odd). Featured items come first whatever their Order |
 
 Optional attributes: `eyebrow` and `heading`, `pending-label` (placeholder text, default "Coming soon"), `programs-heading` (a heading above the program cards, none by default), `heading-level` (`2` or `3`, default `3`: the level of the group and programs headings; program names are one level below). `band` and `band-depth` work as on the Events and Partners elements (see [Cards overlapping the header](#cards-overlapping-the-header)); on the Impact page the band reaches into the first row of number tiles. The placeholder tile is white; set `--cci-pending-bg` on the element (for example `#effbfa`, a light turquoise tint) to change it. Rows are laid out so a short last row is centered (4 per row on desktop, 3 when that leaves fewer alone, 2 on tablets, 1 on phones).
 

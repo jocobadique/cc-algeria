@@ -17,6 +17,10 @@
  * An item with an empty value is drawn as a placeholder tile ("Coming soon"),
  * so the labels can go live before the numbers are known and the client only
  * has to type the number in the CMS later. Unchecked Published hides an item.
+ * Featured (`featured`) marks an ungrouped number with a value as a headline
+ * total (for example "250+ students in total"): on the Impact page it is a
+ * wide turquoise tile above the other numbers, and in the homepage highlights
+ * it is the first tile, in turquoise.
  *
  * Program overviews (the Impact page): the page code can also pass the
  * "Events" items on the `programs` attribute. Each program with impact fields
@@ -106,6 +110,15 @@ cc-impact .cci-value { margin: 0; font: 600 clamp(2.4rem, 4vw, 3.2rem)/1.05 var(
 cc-impact .cci-label { margin: 0; font: 500 1rem/1.45 var(--cci-body); color: var(--cci-deep); }
 cc-impact .cci-detail { margin: 4px 0 0; padding-top: 12px; border-top: 1px solid var(--cci-border); font-size: 0.85rem; line-height: 1.5; color: var(--cci-muted); white-space: pre-line; }
 
+/* A featured total (Featured checked): one wide turquoise tile above the other numbers. */
+cc-impact .cci-total { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 22px; margin: 0 0 24px; padding: 28px 32px; background: var(--cci-accent); border: 2px solid var(--cci-deep); border-radius: 24px; box-shadow: 6px 6px 0 var(--cci-deep); text-align: center; }
+cc-impact .cci-total .cci-value { font-size: clamp(3rem, 6vw, 4.4rem); color: var(--cci-deep); }
+cc-impact .cci-total .cci-label { font: 600 clamp(1.15rem, 2vw, 1.5rem)/1.3 var(--cci-body); color: var(--cci-deep); }
+cc-impact .cci-total .cci-detail { flex-basis: 100%; margin: 0; padding-top: 0; border-top: 0; color: var(--cci-deep); }
+@media (max-width: 560px) {
+  cc-impact .cci-total { flex-direction: column; margin-bottom: 14px; padding: 22px 20px; border-radius: 20px; box-shadow: 4px 4px 0 var(--cci-deep); }
+}
+
 /* A tile whose number isn't known yet. */
 cc-impact .cci-tile.is-pending { background: var(--cci-pending-bg); border-style: dashed; box-shadow: none; }
 cc-impact .cci-pending { align-self: flex-start; margin: 6px 0 10px; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--cci-secondary); color: var(--cci-deep); font: 600 0.78rem/1.2 var(--cci-body); letter-spacing: 0.08em; text-transform: uppercase; }
@@ -146,12 +159,19 @@ cc-impact .cci-hl-tile { min-width: 0; display: flex; flex-direction: column; pa
 cc-impact .cci-hl-value { margin: 0; font: 600 clamp(2.1rem, 3.4vw, 2.8rem)/1 var(--cci-display); color: var(--cci-primary); font-variant-numeric: tabular-nums; white-space: nowrap; }
 cc-impact .cci-hl-label { margin: 8px 0 0; font: 600 0.9rem/1.35 var(--cci-body); color: var(--cci-deep); }
 cc-impact .cci-hl-prog { margin: auto 0 0; padding-top: 10px; font-size: 0.76rem; line-height: 1.4; color: var(--cci-muted); }
+cc-impact .cci-hl-tile.is-featured { background: var(--cci-accent); box-shadow: 5px 5px 0 var(--cci-deep); }
+cc-impact .cci-hl-tile.is-featured .cci-hl-value { color: var(--cci-deep); }
+cc-impact .cci-hl-tile.is-featured .cci-hl-prog { color: var(--cci-deep); }
 cc-impact .cci-hl-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 12px 22px; border-radius: 999px; background: var(--cci-deep); color: #fff; font: 600 0.92rem/1 var(--cci-body); text-decoration: none; transition: background .2s, color .2s; }
 cc-impact .cci-hl-link svg { color: var(--cci-accent); transition: transform .2s; }
 cc-impact .cci-hl-link:hover { background: var(--cci-primary); }
 cc-impact .cci-hl-link:hover svg { transform: translateX(3px); color: #fff; }
 cc-impact .cci-hl-link:focus-visible { outline: 3px solid var(--cci-accent); outline-offset: 3px; }
-@media (max-width: 900px) { cc-impact .cci-hl { --cci-hl-cols: 2 !important; gap: 14px; } }
+@media (max-width: 900px) {
+  cc-impact .cci-hl { --cci-hl-cols: 2 !important; gap: 14px; }
+  /* With an odd count the featured total takes the whole first row. */
+  cc-impact .cci-hl.is-odd .cci-hl-tile.is-featured { grid-column: 1 / -1; }
+}
 @media (max-width: 420px) {
   cc-impact .cci-hl { gap: 12px; }
   cc-impact .cci-hl-tile { padding: 16px 14px 14px; border-radius: 16px; box-shadow: 4px 4px 0 var(--cci-accent); }
@@ -272,9 +292,12 @@ cc-impact [hidden] { display: none !important; }
         value: v.value == null ? "" : String(v.value).trim(),
         detail: v.detail || "",
         group: v.group ? String(v.group).trim() : "",
+        featured: v.featured === true,
         order: typeof v.order === "number" ? v.order : i + 1,
       }))
-      .sort((a, b) => a.order - b.order);
+      .map((item) => ({ ...item, featured: item.featured && !item.group && !!item.value }))
+      // Featured totals lead, in their own order.
+      .sort((a, b) => (b.featured - a.featured) || (a.order - b.order));
   }
 
   class CcImpact extends HTMLElement {
@@ -418,6 +441,19 @@ cc-impact [hidden] { display: none !important; }
         .join("");
     }
 
+    _renderTotals(items) {
+      return items
+        .map(
+          (item) => `
+          <div class="cci-total">
+            <p class="cci-value">${esc(item.value)}</p>
+            <p class="cci-label">${esc(item.title)}</p>
+            ${item.detail ? `<p class="cci-detail">${esc(item.detail)}</p>` : ""}
+          </div>`
+        )
+        .join("");
+    }
+
     _renderPrograms(level) {
       const h = `h${level + 1}`;
       return this._programs
@@ -447,14 +483,16 @@ cc-impact [hidden] { display: none !important; }
       if (limit > 0) items = items.slice(0, limit);
       const href = this.getAttribute("link");
       const linkLabel = this.getAttribute("link-label") || "See our impact";
-      const cols = items.length >= 4 ? 4 : Math.max(items.length, 1);
+      // Up to 4 across, 5 when one of them is a featured total.
+      const max = items.some((i) => i.featured) ? 5 : 4;
+      const cols = Math.min(Math.max(items.length, 1), max);
       this._el.groups.innerHTML =
-        `<div class="cci-hl" style="--cci-hl-cols: ${cols}">` +
+        `<div class="cci-hl${items.length % 2 ? " is-odd" : ""}" style="--cci-hl-cols: ${cols}">` +
         items
           .map((item) => {
             const program = item.detail.split(/\r?\n/)[0].trim();
             return `
-            <div class="cci-hl-tile">
+            <div class="cci-hl-tile${item.featured ? " is-featured" : ""}">
               <p class="cci-hl-value" data-value="${esc(item.value)}">${esc(item.value)}</p>
               <p class="cci-hl-label">${esc(item.title)}</p>
               ${program ? `<p class="cci-hl-prog">${esc(program)}</p>` : ""}
@@ -513,19 +551,24 @@ cc-impact [hidden] { display: none !important; }
           ${body}
         </section>`;
       // Groups in the order of their first item; the ungrouped numbers lead.
+      const totals = this.impact.filter((i) => i.featured);
       const groups = new Map([["", []]]);
-      this.impact.forEach((item) => {
+      this.impact.filter((i) => !i.featured).forEach((item) => {
         if (!groups.has(item.group)) groups.set(item.group, []);
         groups.get(item.group).push(item);
       });
       const parts = [...groups]
-        .filter(([, items]) => items.length)
+        .filter(([name, items]) => items.length || (name === "" && totals.length))
         .map(([name, items]) =>
-          section(name, `<div class="cci-grid" style="--cci-cols: ${columns(items.length)}">${this._renderTiles(items, pending)}</div>`)
+          section(
+            name,
+            (name === "" ? this._renderTotals(totals) : "") +
+              (items.length ? `<div class="cci-grid" style="--cci-cols: ${columns(items.length)}">${this._renderTiles(items, pending)}</div>` : "")
+          )
         );
       // Program cards go after the ungrouped numbers, before the grouped ones.
       if (this._programs.length) {
-        const at = groups.get("").length ? 1 : 0;
+        const at = groups.get("").length || totals.length ? 1 : 0;
         parts.splice(at, 0, section(this.getAttribute("programs-heading"), `<div class="cci-progs">${this._renderPrograms(level)}</div>`));
       }
       this._el.groups.innerHTML = parts.join("");

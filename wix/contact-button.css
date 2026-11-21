@@ -1,0 +1,31 @@
+/* Header Contact button: append to the site's global.css in Wix Studio
+   (Code > CSS > global.css). Select the Contact button in the header and add
+   the class in the CSS Classes panel:
+     Contact button   cc-contact
+   Ink pill (Bright Turquoise theme). The same look is used on hover, so Studio's
+   button hover style can't change it. */
+
+.cc-contact,
+.cc-contact:hover,
+.cc-contact:focus-visible {
+  background: #08201f !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 12px 26px !important;
+  /* Option A look: solid turquoise offset shadow. Delete this line for Option C. */
+  box-shadow: 4px 4px 0 #2ec4b6 !important;
+  transition: none !important;
+}
+
+.cc-contact .wixui-button__label,
+.cc-contact:hover .wixui-button__label {
+  font: 600 15px/1.2 "Poppins", system-ui, sans-serif !important;
+  color: #ffffff !important;
+  letter-spacing: 0 !important;
+}
+
+/* Keyboard focus ring, so the pill stays visible on the white header. */
+.cc-contact:focus-visible {
+  outline: 2px solid #2ec4b6 !important;
+  outline-offset: 3px;
+}
